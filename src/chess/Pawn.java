@@ -23,4 +23,37 @@ public class Pawn extends Piece{
         firstMove = true;
     }
     
+    @Override
+    protected void updateMovableLocations(){
+        
+    }
+    
+    @Override
+    protected void updateThreateningLocations() {
+        int oneOffset = 0;
+        if (owner.equalsIgnoreCase("player1") && location.x <= 6) {
+            oneOffset = 1;
+        } 
+        else if (owner.equalsIgnoreCase("player2") && location.x >= 1) {
+            oneOffset = -1;
+        }
+
+        threateningLocations.clear();
+        
+        //Diagonally opposite squares are being threatened
+        //Column to the left of the current square if possible (needs to be in board bounds)
+        if (location.y >= 1) {
+            threateningLocations.add(new Point(location.x + oneOffset, location.y - 1));
+        }
+        //Column to the right of the current square if possible (needs to be in board bounds)
+        if (location.y <= 6) {
+            threateningLocations.add(new Point(location.x + oneOffset, location.y + 1));
+        }
+    }
+    @Override
+    public void printThreateningLocations(){
+        for (int i = 0; i < threateningLocations.size(); i++){
+            System.out.println(threateningLocations.get(i).toString());
+        }
+    }
 }
