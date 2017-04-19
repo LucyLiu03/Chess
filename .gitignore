@@ -1,4 +1,3 @@
-<<<<<<< HEAD
 *.class
 
 # Mobile Tools for Java (J2ME)
@@ -28,4 +27,3 @@ hs_err_pid*
 hs_err_pid*
 
 nbproject/private
->>>>>>> origin/master
