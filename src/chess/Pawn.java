@@ -50,6 +50,7 @@ public class Pawn extends Piece{
             threateningLocations.add(new Point(location.x + oneOffset, location.y + 1));
         }
     }
+    
     @Override
     public void printThreateningLocations(){
         for (int i = 0; i < threateningLocations.size(); i++){

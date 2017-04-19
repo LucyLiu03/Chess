@@ -17,8 +17,12 @@ public class Chess {
     public static void main(String[] args) {
         ChessGame cgame = new ChessGame();
         System.out.println(cgame.getChessBoard().toString());
+        System.out.println("---------------------");
+        System.out.println("---------------");
         cgame.getChessBoard().placePieceAt(cgame.getChessBoard().getPieceAt(new Point (0, 0)), new Point(2, 0));
         
+        cgame.getChessBoard().getPieceAt(new Point (2, 0)).updateThreateningLocations();
+        cgame.getChessBoard().getPieceAt(new Point (2, 0)).printThreateningLocations();
         System.out.println(cgame.getChessBoard().toString());
     }
 }

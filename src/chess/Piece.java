@@ -49,4 +49,9 @@ public abstract class Piece {
     protected void updateThreateningLocations(){};
     protected void updateMovableLocations(){};
     protected void printThreateningLocations(){};
+    
+    
+//    protected ArrayList<Point> getDiagonalLocations(String direction, Point curLocation){
+//        if 
+//    }
 }

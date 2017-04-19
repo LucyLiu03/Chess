@@ -37,10 +37,8 @@ public class ChessBoard {
     }
     
     public static boolean locationInBounds(Point location) {
-        return location.x >= 0 && 
-               location.x < 8 && 
-               location.y >= 0 &&
-               location.y < 8;
+        return location.x >= 0 && location.x < 8 && 
+               location.y >= 0 && location.y < 8;
     }
 
     public Piece getPieceAt(Point location) {
