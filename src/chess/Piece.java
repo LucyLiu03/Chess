@@ -11,11 +11,12 @@ import java.util.ArrayList;
  *
  * @author advai
  */
-public class Piece {
+public abstract class Piece {
     String owner;
     Point location;
     char id;
     ArrayList<Point> threateningLocations;
+    ArrayList<Point> movableLocations;
     ChessGame game;
     
     public Piece(String owner, Point initialLocation, ChessGame cGame) {
@@ -25,4 +26,27 @@ public class Piece {
         this.game = cGame;
         game.getChessBoard().placePieceAt(this, initialLocation);
     }
+    protected ArrayList<Point> getVerticalLocations(int direction, Point curLocation){
+        ArrayList<Point> verticalLocations = new ArrayList<>();
+        if (direction == 1){            
+            for (int row = curLocation.x + 1; row < 8; row++){
+                if (game.getChessBoard().isPieceAt(row, row)){
+                    break;
+                }
+                verticalLocations.add(new Point(row, curLocation.y));                
+            }            
+        }
+        else{
+            for (int row = curLocation.x - 1; row >= 0; row--){
+                if (game.getChessBoard().isPieceAt(row, row)){
+                    break;
+                }
+                verticalLocations.add(new Point(row, curLocation.y));                
+            }
+        }
+        return verticalLocations;
+    }
+    protected void updateThreateningLocations(){};
+    protected void updateMovableLocations(){};
+    protected void printThreateningLocations(){};
 }
