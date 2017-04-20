@@ -30,22 +30,46 @@ public abstract class Piece {
         ArrayList<Point> verticalLocations = new ArrayList<>();
         if (direction == 1){            
             for (int row = curLocation.x + 1; row < 8; row++){
-                if (game.getChessBoard().isPieceAt(row, row)){
+                verticalLocations.add(new Point(row, curLocation.y)); 
+                if (game.getChessBoard().isPieceAt(row, curLocation.y)){
                     break;
-                }
-                verticalLocations.add(new Point(row, curLocation.y));                
+                }                          
             }            
         }
         else{
             for (int row = curLocation.x - 1; row >= 0; row--){
-                if (game.getChessBoard().isPieceAt(row, row)){
+                verticalLocations.add(new Point(row, curLocation.y)); 
+                if (game.getChessBoard().isPieceAt(row, curLocation.y)){
                     break;
-                }
-                verticalLocations.add(new Point(row, curLocation.y));                
+                }                    
             }
         }
         return verticalLocations;
     }
+    
+    protected ArrayList<Point> getHorizontalLocations(int direction, Point curLocation){
+        ArrayList<Point> horizontalLocations = new ArrayList<>();
+        
+        if (direction == 1){ // 1 = move to the right
+            for (int column = curLocation.y + 1; column < 8; column++){
+                horizontalLocations.add(new Point (curLocation.x, column));
+                if (game.getChessBoard().isPieceAt(curLocation.x, column)){
+                    break;
+                }
+                
+            }
+        }
+        else{ // move to the left
+            for (int column = curLocation.y - 1; column >=0; column--){
+                horizontalLocations.add(new Point (curLocation.x, column));
+                if (game.getChessBoard().isPieceAt(curLocation.x, column)){
+                    break;
+                }
+            }
+        }
+        return horizontalLocations;
+    }
+    
     protected void updateThreateningLocations(){};
     protected void updateMovableLocations(){};
     protected void printThreateningLocations(){};

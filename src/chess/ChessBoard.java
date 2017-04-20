@@ -58,7 +58,7 @@ public class ChessBoard {
     public void chessBoard ( int row, int col){
         graphics = new JFrame();
         
-        graphics.setTitle("Game of Life Simulator");
+        graphics.setTitle("Chess");
         graphics.setSize(800, 800);
         graphics.setBackground(Color.black);
         Container pane = graphics.getContentPane();

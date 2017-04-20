@@ -19,12 +19,15 @@ public class Rook extends Piece{
             id = 'r';
         }
     }
-    
     @Override
     protected void updateThreateningLocations() {
         threateningLocations.addAll(super.getVerticalLocations((id == 'R') ? 1:-1, location));
         System.out.println(super.getVerticalLocations((id == 'R') ? 1:-1, location).isEmpty());
         System.out.println("asdasdsad");
+        threateningLocations.addAll(super.getHorizontalLocations((id == 'R') ? 1:-1, location));
+        System.out.println(super.getHorizontalLocations((id == 'R') ? 1:-1, location).isEmpty());
+        System.out.println("asdasdsad");
+        
     }
     @Override
     public void printThreateningLocations(){
