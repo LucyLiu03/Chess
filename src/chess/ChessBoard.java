@@ -4,7 +4,15 @@
  */
 package chess;
 
+import java.awt.Color;
+import java.awt.Container;
+import java.awt.Dimension;
+import java.awt.GridLayout;
 import java.awt.Point;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import javax.swing.JButton;
+import javax.swing.JFrame;
 
 /**
  *
@@ -12,6 +20,8 @@ import java.awt.Point;
  */
 public class ChessBoard {
     private Piece[][] board;
+    int row, col = 8;
+    JFrame graphics;
 
     public ChessBoard() {
         board = new Piece[8][8];
@@ -44,7 +54,49 @@ public class ChessBoard {
     public Piece getPieceAt(Point location) {
         return board[location.x][location.y];
     }
-
+    
+    public void chessBoard ( int row, int col){
+        graphics = new JFrame();
+        
+        graphics.setTitle("Game of Life Simulator");
+        graphics.setSize(800, 800);
+        graphics.setBackground(Color.black);
+        Container pane = graphics.getContentPane();
+         
+        pane.setLayout(new GridLayout (row, col));
+        Dimension d = new Dimension (50,50);
+        Color c1 = new Color (139,69,19);
+        Color c2 = new Color (222,184,135);
+        
+        for (int i = 0; i < 8; i++){
+            for (int j = 0; j < 8; j++){
+                
+            
+            JButton button = new JButton();
+            button.setPreferredSize(d);
+            
+            button.setBackground(c1);
+            
+            if ((i%2==0 && j%2==0)|| (i%2 != 0 && j%2 != 0)){
+                button.setBackground(c2);
+                
+            }
+            button.setBorderPainted(false);
+            pane.add(button);
+            
+            final int finalI = i;
+            final int finalJ = j;
+            
+            button.addActionListener(new ActionListener(){
+                public void actionPerformed(ActionEvent arg0) {
+                        System.out.println(Integer.toString(finalI) + Integer.toString(finalJ));
+               
+                }
+            });
+            }
+        }
+    }
+    
     @Override
     public String toString() {
         String output = "  0 1 2 3 4 5 6 7\n";

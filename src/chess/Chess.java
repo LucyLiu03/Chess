@@ -5,6 +5,7 @@
 package chess;
 
 import java.awt.Point;
+import javax.swing.JFrame;
 /**
  *
  * @author advai
@@ -24,5 +25,12 @@ public class Chess {
         cgame.getChessBoard().getPieceAt(new Point (2, 0)).updateThreateningLocations();
         cgame.getChessBoard().getPieceAt(new Point (2, 0)).printThreateningLocations();
         System.out.println(cgame.getChessBoard().toString());
+        
+        ChessBoard gt = new ChessBoard();
+        gt.chessBoard(8, 8);
+
+        gt.graphics.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        gt.graphics.pack();
+        gt.graphics.setVisible(true);
     }
 }
