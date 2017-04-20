@@ -23,6 +23,7 @@ public abstract class Piece {
         this.owner = owner;
         Point location = initialLocation;
         threateningLocations = new ArrayList<>();
+        movableLocations = new ArrayList<>();
         this.game = cGame;
         game.getChessBoard().placePieceAt(this, initialLocation);
     }
@@ -71,8 +72,12 @@ public abstract class Piece {
     }
     
     protected void updateThreateningLocations(){};
-    protected void updateMovableLocations(){};
+    
+    protected void updateMovableLocations(){
+        movableLocations = threateningLocations;
+    };
     protected void printThreateningLocations(){};
+    protected void printMovableLocations(){};
     
     
 //    protected ArrayList<Point> getDiagonalLocations(String direction, Point curLocation){

@@ -25,7 +25,23 @@ public class Pawn extends Piece{
     
     @Override
     protected void updateMovableLocations(){
-        
+        int oneOffset = 0;
+        if (owner.equalsIgnoreCase("player1") && location.x <= 6) {
+            oneOffset = 1;
+        } 
+        else if (owner.equalsIgnoreCase("player2") && location.x >= 1) {
+            oneOffset = -1;
+        }
+        movableLocations.clear();
+        if (firstMove){
+            Point proposedLocation = new Point(location.x + oneOffset*2, location.y);
+            if (ChessBoard.locationInBounds(proposedLocation)){
+                movableLocations.add(proposedLocation);
+            }
+        }
+        if (oneOffset != 0 && !game.getChessBoard().isPieceAt(location.x+oneOffset, location.y)){
+            movableLocations.add(new Point(location.x+oneOffset, location.y));
+        }
     }
     
     @Override
@@ -55,6 +71,13 @@ public class Pawn extends Piece{
     public void printThreateningLocations(){
         for (int i = 0; i < threateningLocations.size(); i++){
             System.out.println(threateningLocations.get(i).toString());
+        }
+    }
+    
+    @Override
+    public void printMovableLocations(){
+        for (int i = 0; i < movableLocations.size(); i++){
+            System.out.println(movableLocations.get(i).toString());
         }
     }
 }

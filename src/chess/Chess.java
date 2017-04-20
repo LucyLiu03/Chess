@@ -28,7 +28,13 @@ public class Chess {
         
         ChessBoard gt = new ChessBoard();
         gt.chessBoard(8, 8);
-
+        cgame.getChessBoard().getPieceAt(new Point (1, 1)).updateThreateningLocations();
+        
+        cgame.getChessBoard().getPieceAt(new Point (1, 1)).updateMovableLocations();
+        System.out.println("----");
+        cgame.getChessBoard().getPieceAt(new Point (1, 1)).printThreateningLocations();
+        System.out.println("----");
+        cgame.getChessBoard().getPieceAt(new Point (1, 1)).printMovableLocations();
         gt.graphics.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         gt.graphics.pack();
         gt.graphics.setVisible(true);
