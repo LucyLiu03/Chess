@@ -75,7 +75,60 @@ public abstract class Piece {
     protected void printThreateningLocations(){};
     
     
-//    protected ArrayList<Point> getDiagonalLocations(String direction, Point curLocation){
-//        if 
-//    }
+    protected ArrayList<Point> getDiagonalLocations(String direction, Point curLocation){
+        ArrayList<Point> diagonalLocations = new ArrayList<>();
+        
+        int curRow = curLocation.x;
+        int curCol = curLocation.y;
+        
+        if (direction.equals("NW")){          
+            while (0 <= curRow && 0 <= curCol){
+                curRow--;
+                curCol--;
+                diagonalLocations.add(new Point (curRow, curCol));
+                if (game.getChessBoard().isPieceAt(curRow, curCol)){
+                    break;
+                }             
+            }
+        }
+        
+        else if (direction.equals("NE")){
+           while ( 0 <= curRow && curCol <= 7){
+               curRow--;
+               curCol++;
+               diagonalLocations.add(new Point (curRow, curCol));
+               if (game.getChessBoard().isPieceAt(curRow, curCol)){
+                   break;
+               }
+           }
+        }
+        
+        else if (direction.equals("SW")){
+            while ( curRow <= 7 && 0 <= curCol){
+                curRow++;
+                curCol--;
+                diagonalLocations.add(new Point (curRow, curCol));
+                if (game.getChessBoard().isPieceAt(curRow, curCol)){
+                    break;
+                } 
+            }
+        }
+        
+        else if (direction.equals("SE")){
+            while ( curRow <= 7 && curCol <= 7){
+                curRow++;
+                curCol++;
+                diagonalLocations.add(new Point (curRow, curCol));
+                if (game.getChessBoard().isPieceAt(curRow, curCol)){
+                    break;
+                } 
+            }
+        }
+      
+        else{
+            System.out.println("***Invalid direction given***");
+        }
+        
+        return diagonalLocations;
+    }
 }
