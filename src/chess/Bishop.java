@@ -19,4 +19,16 @@ public class Bishop extends Piece{
             id = 'b';
         }
     }
+     
+     @Override
+    protected void updateThreateningLocations(){
+        threateningLocations.clear();
+        threateningLocations.addAll(getDiagonalLocations("NE"));
+        threateningLocations.addAll(getDiagonalLocations("NW"));
+        threateningLocations.addAll(getDiagonalLocations("SW"));
+        threateningLocations.addAll(getDiagonalLocations("SE"));
+        
+        updateMovableLocations();
+            
+    }
 }
