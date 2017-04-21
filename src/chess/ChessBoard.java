@@ -83,7 +83,7 @@ public class ChessBoard {
         Container pane = graphics.getContentPane();
          
         pane.setLayout(new GridLayout (row, col));
-        Dimension d = new Dimension (50,50);
+        Dimension d = new Dimension (100, 100);
         Color c1 = new Color (139,69,19);
         Color c2 = new Color (222,184,135);
         try {
@@ -116,7 +116,7 @@ public class ChessBoard {
                 System.out.println("null");
                 }
                 
-                Image newimg = img.getScaledInstance(50, 50, java.awt.Image.SCALE_SMOOTH ) ;  
+                Image newimg = img.getScaledInstance(100, 100, java.awt.Image.SCALE_SMOOTH ) ;  
                 ImageIcon icon = new ImageIcon( newimg );
                 button.setIcon(icon);
                 

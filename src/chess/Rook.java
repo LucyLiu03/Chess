@@ -21,11 +21,11 @@ public class Rook extends Piece{
     }
     @Override
     protected void updateThreateningLocations() {
-        threateningLocations.addAll(getVerticalLocations(1, location));
-        threateningLocations.addAll(getVerticalLocations(-1, location));
+        threateningLocations.addAll(getVerticalLocations(1));
+        threateningLocations.addAll(getVerticalLocations(-1));
         
-        threateningLocations.addAll(getHorizontalLocations(1, location));
-        threateningLocations.addAll(getHorizontalLocations(-1, location));
+        threateningLocations.addAll(getHorizontalLocations(1));
+        threateningLocations.addAll(getHorizontalLocations(-1));
 //        System.out.println(getVerticalLocations((id == 'R') ? 1:-1, location).isEmpty());
 //        System.out.println("asdasdsad");
 //        System.out.println(super.getHorizontalLocations((id == 'R') ? 1:-1, location).isEmpty());

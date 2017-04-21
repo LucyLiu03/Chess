@@ -19,4 +19,20 @@ public class Knight extends Piece{
             id = 'n';
         }
     }
+    
+    protected void updateThreateningLocations(){
+        threateningLocations.clear();
+        
+
+        threateningLocations.add(new Point(location.x - 2, location.y - 1 )); // up to left
+        threateningLocations.add(new Point(location.x - 2, location.y + 1 )); // up to right           
+        threateningLocations.add(new Point(location.x - 1, location.y + 2 )); // right to up
+        threateningLocations.add(new Point(location.x + 1, location.y + 2 )); // right to down
+        threateningLocations.add(new Point(location.x + 2, location.y + 1 )); // down to right        
+        threateningLocations.add(new Point(location.x + 2, location.y - 1 )); // down to left
+        threateningLocations.add(new Point(location.x + 1, location.y - 2 )); // left to down
+        threateningLocations.add(new Point(location.x - 1, location.y - 2 )); // left to up
+        updateMovableLocations();
+        //not sure how to take care of values that come up out of range of chess board
+    }
 }
