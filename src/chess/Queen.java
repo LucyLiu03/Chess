@@ -19,4 +19,21 @@ public class Queen extends Piece{
             id = 'q';
         }
     }
+    
+    protected void updateThreateningLocations(){
+        threateningLocations.clear();
+        
+        threateningLocations.addAll(getVerticalLocations(1)); // locations up
+        threateningLocations.addAll(getVerticalLocations(-1)); //locations down
+        
+        threateningLocations.addAll(getHorizontalLocations(1)); //locations right
+        threateningLocations.addAll(getHorizontalLocations(-1)); // location left
+        
+        threateningLocations.addAll(getDiagonalLocations("NE"));//diagonal NE
+        threateningLocations.addAll(getDiagonalLocations("NW")); //diagonal NW
+        threateningLocations.addAll(getDiagonalLocations("SE")); //diagonal SE
+        threateningLocations.addAll(getDiagonalLocations("SW")); //diagonal SW
+        
+        updateMovableLocations();
+    }
 }
