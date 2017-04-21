@@ -8,9 +8,16 @@ import java.awt.Color;
 import java.awt.Container;
 import java.awt.Dimension;
 import java.awt.GridLayout;
+import java.awt.Image;
 import java.awt.Point;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.io.File;
+import java.io.IOException;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+import javax.imageio.ImageIO;
+import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JFrame;
 
@@ -54,7 +61,19 @@ public class ChessBoard {
     public Piece getPieceAt(Point location) {
         return board[location.x][location.y];
     }
-    
+    Image[] images = new Image[9];
+    public void initializeImages() throws IOException{
+         String[] IMAGE_FILES = {
+          "Rook.png", "Knight.png", "Bishop.png", "Queen.png", "King.png", "Bishop.png"
+            , "Knight.png", "Rook.png", "Pawn.png"};
+         
+         
+         for (int k = 0; k < IMAGE_FILES.length; k ++){
+            images [k] = ImageIO.read(new File(String.format(IMAGE_FILES[k])));      
+            
+         }
+         
+    }
     public void chessBoard ( int row, int col){
         graphics = new JFrame();
         
@@ -67,7 +86,11 @@ public class ChessBoard {
         Dimension d = new Dimension (50,50);
         Color c1 = new Color (139,69,19);
         Color c2 = new Color (222,184,135);
-        
+        try {
+            initializeImages();
+        } catch (IOException ex) {
+            Logger.getLogger(ChessBoard.class.getName()).log(Level.SEVERE, null, ex);
+        }
         for (int i = 0; i < 8; i++){
             for (int j = 0; j < 8; j++){
                 
@@ -86,7 +109,18 @@ public class ChessBoard {
             
             final int finalI = i;
             final int finalJ = j;
-            
+            if (i == 0){
+                Image img = images[j];
+                System.out.println(images[j]);
+                if (new ImageIcon(img) == null){
+                System.out.println("null");
+                }
+                
+                Image newimg = img.getScaledInstance(50, 50, java.awt.Image.SCALE_SMOOTH ) ;  
+                ImageIcon icon = new ImageIcon( newimg );
+                button.setIcon(icon);
+                
+            }  
             button.addActionListener(new ActionListener(){
                 public void actionPerformed(ActionEvent arg0) {
                         System.out.println(Integer.toString(finalI) + Integer.toString(finalJ));

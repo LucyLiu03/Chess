@@ -4,7 +4,11 @@
  */
 package chess;
 
+import java.awt.Image;
 import java.awt.Point;
+import java.io.File;
+import java.io.IOException;
+import javax.imageio.ImageIO;
 import javax.swing.JFrame;
 /**
  *
@@ -38,5 +42,8 @@ public class Chess {
         gt.graphics.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         gt.graphics.pack();
         gt.graphics.setVisible(true);
+        
+        
     }
+    
 }
