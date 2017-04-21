@@ -27,20 +27,20 @@ public abstract class Piece {
         this.game = cGame;
         game.getChessBoard().placePieceAt(this, initialLocation);
     }
-    protected ArrayList<Point> getVerticalLocations(int direction, Point curLocation){
+    protected ArrayList<Point> getVerticalLocations(int direction){
         ArrayList<Point> verticalLocations = new ArrayList<>();
         if (direction == 1){            
-            for (int row = curLocation.x + 1; row < 8; row++){
-                verticalLocations.add(new Point(row, curLocation.y)); 
-                if (game.getChessBoard().isPieceAt(row, curLocation.y)){
+            for (int row = location.x + 1; row < 8; row++){
+                verticalLocations.add(new Point(row, location.y)); 
+                if (game.getChessBoard().isPieceAt(row, location.y)){
                     break;
                 }                          
             }            
         }
         else{
-            for (int row = curLocation.x - 1; row >= 0; row--){
-                verticalLocations.add(new Point(row, curLocation.y)); 
-                if (game.getChessBoard().isPieceAt(row, curLocation.y)){
+            for (int row = location.x - 1; row >= 0; row--){
+                verticalLocations.add(new Point(row, location.y)); 
+                if (game.getChessBoard().isPieceAt(row, location.y)){
                     break;
                 }                    
             }
@@ -48,22 +48,22 @@ public abstract class Piece {
         return verticalLocations;
     }
     
-    protected ArrayList<Point> getHorizontalLocations(int direction, Point curLocation){
+    protected ArrayList<Point> getHorizontalLocations(int direction){
         ArrayList<Point> horizontalLocations = new ArrayList<>();
         
         if (direction == 1){ // 1 = move to the right
-            for (int column = curLocation.y + 1; column < 8; column++){
-                horizontalLocations.add(new Point (curLocation.x, column));
-                if (game.getChessBoard().isPieceAt(curLocation.x, column)){
+            for (int column = location.y + 1; column < 8; column++){
+                horizontalLocations.add(new Point (location.x, column));
+                if (game.getChessBoard().isPieceAt(location.x, column)){
                     break;
                 }
                 
             }
         }
         else{ // move to the left
-            for (int column = curLocation.y - 1; column >=0; column--){
-                horizontalLocations.add(new Point (curLocation.x, column));
-                if (game.getChessBoard().isPieceAt(curLocation.x, column)){
+            for (int column = location.y - 1; column >=0; column--){
+                horizontalLocations.add(new Point (location.x, column));
+                if (game.getChessBoard().isPieceAt(location.x, column)){
                     break;
                 }
             }
@@ -80,11 +80,11 @@ public abstract class Piece {
     protected void printMovableLocations(){};
     
     
-    protected ArrayList<Point> getDiagonalLocations(String direction, Point curLocation){
+    protected ArrayList<Point> getDiagonalLocations(String direction){
         ArrayList<Point> diagonalLocations = new ArrayList<>();
         
-        int curRow = curLocation.x;
-        int curCol = curLocation.y;
+        int curRow = location.x;
+        int curCol = location.y;
         
         if (direction.equals("NW")){          
             while (0 <= curRow && 0 <= curCol){
