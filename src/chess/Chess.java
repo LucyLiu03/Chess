@@ -26,17 +26,14 @@ public class Chess {
         System.out.println(cgame.getChessBoard().toString());
         System.out.println("---------------------");
         System.out.println("---------------");
-        cgame.getChessBoard().placePieceAt(cgame.getChessBoard().getPieceAt(new Point (0, 0)), new Point(3, 0));
         
+        cgame.getChessBoard().createGraphics(8, 8);
+        cgame.getChessBoard().placePieceAt(cgame.getChessBoard().getPieceAt(new Point (0, 4)), new Point(3, 3));
+        cgame.getChessBoard().updateGraphics();
         cgame.getChessBoard().getPieceAt(new Point (0, 6)).updateThreateningLocations();
         cgame.getChessBoard().getPieceAt(new Point (0, 6)).printThreateningLocations();
         System.out.println("sadasdasdsadsadsda");
         System.out.println(cgame.getChessBoard().toString());
-        try {
-            cgame.getChessBoard().createGraphics(8, 8);
-        } catch (IOException ex) {
-            Logger.getLogger(Chess.class.getName()).log(Level.SEVERE, null, ex);
-        }
 //        ChessBoard gt = new ChessBoard();
 //        try {
 //            gt.chessBoard(8, 8);

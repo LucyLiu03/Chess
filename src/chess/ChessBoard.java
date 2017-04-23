@@ -14,6 +14,8 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.io.File;
 import java.io.IOException;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.imageio.ImageIO;
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
@@ -28,12 +30,14 @@ public class ChessBoard {
     int row, col = 8;
     JFrame graphics;    
     JButton[][] buttons;
-    int playerCounter;
+    String curPlayer;
+    Point curMove;
 
     public ChessBoard() {
         board = new Piece[8][8];
         buttons = new JButton[8][8];
-        playerCounter = 1;
+        curPlayer = "player1";
+        curMove = null;
     }
 
     public boolean isPieceAt(int row, int col) {
@@ -48,6 +52,9 @@ public class ChessBoard {
     }
 
     public void placePieceAt(Piece piece, Point location) {
+        if (piece instanceof Pawn && ((Pawn)piece).firstMove){
+            ((Pawn)piece).firstMove = false;
+        }
         if (isPieceAt(location.x, location.y)) {
             removePieceAt(location);
         }
@@ -83,7 +90,7 @@ public class ChessBoard {
          }
          
     }
-    public void createGraphics(int row, int col) throws IOException{
+    public void createGraphics(int row, int col){
         graphics = new JFrame();
         
         graphics.setTitle("Chess");
@@ -93,8 +100,6 @@ public class ChessBoard {
          
         pane.setLayout(new GridLayout (row, col));
         Dimension d = new Dimension (100, 100);
-        Color c1 = new Color (139,69,19);
-        Color c2 = new Color (222,184,135);
 //        try {
 //            initializeImages();
 //        } catch (IOException ex) {
@@ -109,12 +114,12 @@ public class ChessBoard {
             buttons[i][j].setPreferredSize(d);
             
             
-            if ((i%2==0 && j%2==0)|| (i%2 != 0 && j%2 != 0)){
-                buttons[i][j].setBackground(c2);  
-            }
-            else{                
-                buttons[i][j].setBackground(c1);
-            }
+//            if ((i%2==0 && j%2==0)|| (i%2 != 0 && j%2 != 0)){
+//                buttons[i][j].setBackground(c2);  
+//            }
+//            else{                
+//                buttons[i][j].setBackground(c1);
+//            }
             buttons[i][j].setBorderPainted(false);
             pane.add(buttons[i][j]);
             
@@ -124,9 +129,24 @@ public class ChessBoard {
             buttons[i][j].addActionListener(new ActionListener(){
                 @Override
                 public void actionPerformed(ActionEvent arg0) {
-                    if (board[finalI][finalJ] != null){
+                    if (curMove != null){
+                        if (board[curMove.x][curMove.y].threateningLocations.contains(new Point(finalI, finalJ))){
+                            placePieceAt(board[curMove.x][curMove.y], new Point(finalI, finalJ));
+                            updateGraphics();
+                            if (curPlayer.equals("player1")){
+                            curPlayer = "player2";
+                            }
+                            else{
+                                curPlayer = "player1";
+                            }
+                            curMove = null;
+                        }
+                        
+                    }
+                    if (board[finalI][finalJ] != null && board[finalI][finalJ].owner.equals(curPlayer)){                        
                         board[finalI][finalJ].updateThreateningLocations();                        
                         resetBackgrounds();
+                        buttons[finalI][finalJ].setBackground(Color.CYAN);
                         if (board[finalI][finalJ].threateningLocations.size() != 0){
                             for (int loc = 0; loc < board[finalI][finalJ].threateningLocations.size(); loc++){
                                 if (isPieceAt(board[finalI][finalJ].threateningLocations.get(loc).x, board[finalI][finalJ].threateningLocations.get(loc).y)){
@@ -136,6 +156,7 @@ public class ChessBoard {
                                     buttons[board[finalI][finalJ].threateningLocations.get(loc).x][board[finalI][finalJ].threateningLocations.get(loc).y].setBackground(Color.GREEN);
                                 }
                             }
+                            curMove = new Point(finalI, finalJ);
                         }
                     }
 //                        System.out.println(Integer.toString(finalI) + Integer.toString(finalJ));
@@ -147,8 +168,8 @@ public class ChessBoard {
         updateGraphics();
     }
     public void resetBackgrounds(){
-        Color c1 = new Color (139,69,19);
-        Color c2 = new Color (222,184,135);
+        Color c2 = new Color (139,69,19);
+        Color c1 = new Color (222,184,135);
         for (int i = 0; i < 8; i++){
             for (int j = 0; j < 8; j++){
                 if ((i%2==0 && j%2==0)|| (i%2 != 0 && j%2 != 0)){
@@ -160,9 +181,9 @@ public class ChessBoard {
             }
         }
     }
-    public void updateGraphics() throws IOException{
-        Color c1 = new Color (139,69,19);
-        Color c2 = new Color (222,184,135);
+    public void updateGraphics(){
+        Color c2 = new Color (139,69,19);
+        Color c1 = new Color (222,184,135);
         for (int i = 0; i < 8; i++){
             for (int j = 0; j < 8; j++){
                 if ((i%2==0 && j%2==0)|| (i%2 != 0 && j%2 != 0)){
@@ -172,17 +193,28 @@ public class ChessBoard {
                     buttons[i][j].setBackground(c1);
                 }
                 if (getPieceAt(new Point(i, j)) != null ){
-                    Image img;
+                    Image img = null;
                     
                     if (this.getPieceAt(new Point(i, j)).owner.equals("player1")){                    
-                        img = ImageIO.read(new File(String.format(this.getPieceAt(new Point(i, j)).id+".png")));
+                        try {
+                            img = ImageIO.read(new File(String.format(this.getPieceAt(new Point(i, j)).id+".png")));
+                        } catch (IOException ex) {
+                            Logger.getLogger(ChessBoard.class.getName()).log(Level.SEVERE, null, ex);
+                        }
                     }
                     else{
-                        img = ImageIO.read(new File(String.format(this.getPieceAt(new Point(i, j)).id+"-black.png")));
+                        try {
+                            img = ImageIO.read(new File(String.format(this.getPieceAt(new Point(i, j)).id+"-black.png")));
+                        } catch (IOException ex) {
+                            Logger.getLogger(ChessBoard.class.getName()).log(Level.SEVERE, null, ex);
+                        }
                     }
                     Image newimg = img.getScaledInstance(100, 100, java.awt.Image.SCALE_SMOOTH ) ;  
                     ImageIcon icon = new ImageIcon( newimg );
                     buttons[i][j].setIcon(icon);             
+                }
+                else{
+                    buttons[i][j].setIcon(null);
                 }
             }
         }

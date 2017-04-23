@@ -18,6 +18,7 @@ public abstract class Piece {
     ArrayList<Point> threateningLocations;
 //    ArrayList<Point> movableLocations;
     ChessGame game;
+//    boolean firstMove;
     
     public Piece(String owner, Point initialLocation, ChessGame cGame) {
         this.owner = owner;
@@ -26,6 +27,8 @@ public abstract class Piece {
 //        movableLocations = new ArrayList<>();
         this.game = cGame;
         game.getChessBoard().placePieceAt(this, initialLocation);
+        //IMPROVE THIS BOOLEAN
+//        firstMove = true;
     }
     protected ArrayList<Point> getVerticalLocations(int direction){
         ArrayList<Point> verticalLocations = new ArrayList<>();

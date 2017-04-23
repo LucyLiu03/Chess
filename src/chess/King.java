@@ -21,7 +21,7 @@ public class King extends Piece{
     }
     
    
-   protected void updateMovableLocations(){
+   protected void updateThreateningLocations(){
        threateningLocations.clear();
        
        for (int i = -1; i<=1; i++){
@@ -31,6 +31,5 @@ public class King extends Piece{
                }              
            }
        }
-       updateMovableLocations();
    } 
 }

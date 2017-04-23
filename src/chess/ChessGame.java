@@ -48,12 +48,12 @@ public class ChessGame {
         //King
         if (player.equalsIgnoreCase("player1")) {
             player1K = new King(player, new Point(homeRow, colIncrement), this);
+            Piece q = new Queen(player, new Point(homeRow, 7-colIncrement), this);
         } else {
-            player2K = new King(player, new Point(homeRow, colIncrement), this);
-        }
+            player2K = new King(player, new Point(homeRow, colIncrement+1), this);
+            Piece q = new Queen(player, new Point(homeRow, 7-colIncrement-1), this);
+        }       
         
-        //Queen
-        Piece q = new Queen(player, new Point(homeRow, 7-colIncrement), this);
 
         //Pawns
         for (int i = 0; i < 8; i++) {

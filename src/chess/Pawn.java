@@ -11,7 +11,7 @@ import java.awt.Point;
  * @author advai
  */
 public class Pawn extends Piece{
-    private boolean firstMove;
+    public boolean firstMove;
     
     public Pawn(String owner, Point initialLocation, ChessGame game) {
         super(owner, initialLocation, game);
@@ -51,14 +51,17 @@ public class Pawn extends Piece{
         //Diagonally opposite squares are being threatened
         //Column to the left of the current square if possible (needs to be in board bounds)
         if (location.y >= 1 && game.getChessBoard().isPieceAt(location.x + oneOffset, location.y - 1)) {
-            threateningLocations.add(new Point(location.x + oneOffset, location.y - 1));
-            
+            if (!game.getChessBoard().getPieceOwner(new Point(location.x + oneOffset, location.y - 1)).equals(owner)){
+                threateningLocations.add(new Point(location.x + oneOffset, location.y - 1));
+            }
         }
         //Column to the right of the current square if possible (needs to be in board bounds)
         if (location.y <= 6 && game.getChessBoard().isPieceAt(location.x + oneOffset, location.y + 1)) {
-            threateningLocations.add(new Point(location.x + oneOffset, location.y + 1));
-            //TODO FIX END PAWN ACTION
-            System.out.println("sadasdas2d");
+            if (!game.getChessBoard().getPieceOwner(new Point(location.x + oneOffset, location.y + 1)).equals(owner)){
+                threateningLocations.add(new Point(location.x + oneOffset, location.y + 1));
+                //TODO FIX END PAWN ACTION
+                System.out.println("sadasdas2d");
+            }
         }
         
         if (oneOffset != 0 && !game.getChessBoard().isPieceAt(location.x+oneOffset, location.y) && ChessBoard.locationInBounds(new Point(location.x+oneOffset, location.y))){

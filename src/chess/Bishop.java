@@ -28,7 +28,7 @@ public class Bishop extends Piece{
         threateningLocations.addAll(getDiagonalLocations("SW"));
         threateningLocations.addAll(getDiagonalLocations("SE"));
         
-        updateMovableLocations();
+//        updateMovableLocations();
             
     }
 }
