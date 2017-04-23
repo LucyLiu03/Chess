@@ -31,10 +31,4 @@ public class Rook extends Piece{
 //        System.out.println(super.getHorizontalLocations((id == 'R') ? 1:-1, location).isEmpty());
 //        System.out.println("asdasdsad");        
     }
-    @Override
-    public void printThreateningLocations(){
-        for (int i = 0; i < threateningLocations.size(); i++){
-            System.out.println(threateningLocations.get(i).toString());
-        }
-    }
 }

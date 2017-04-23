@@ -19,6 +19,7 @@ public class ChessGame {
         chessBoard = new ChessBoard();
         setupTeam(0, "player1");
         setupTeam(7, "player2");
+        System.out.println("DONEONDOEMN");
     }
     
     public ChessBoard getChessBoard() {

@@ -34,6 +34,6 @@ public class Queen extends Piece{
         threateningLocations.addAll(getDiagonalLocations("SE")); //diagonal SE
         threateningLocations.addAll(getDiagonalLocations("SW")); //diagonal SW
         
-        updateMovableLocations();
+//        updateMovableLocations();
     }
 }
