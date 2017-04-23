@@ -11,8 +11,8 @@ import java.awt.Point;
  */
 public class ChessGame {
     private ChessBoard chessBoard;
-    private King player1K;
-    private King player2K;
+    public Point player1K;
+    public Point player2K;
 
     
     public ChessGame() {
@@ -47,10 +47,12 @@ public class ChessGame {
 
         //King
         if (player.equalsIgnoreCase("player1")) {
-            Piece k = new King(player, new Point(homeRow, colIncrement+1), this);
+            Piece k = new King(player, new Point(homeRow, colIncrement+1), this);            
+            player1K = new Point(homeRow, colIncrement+1);
             Piece q = new Queen(player, new Point(homeRow, 6-colIncrement), this);
         } else {
             Piece k = new King(player, new Point(homeRow, colIncrement+1), this);
+            player2K = new Point(homeRow, colIncrement+1);
             Piece q = new Queen(player, new Point(homeRow, 6-colIncrement), this);
         }       
         
@@ -64,11 +66,4 @@ public class ChessGame {
     }
     
 
-    public King getPlayer1King() {
-        return player1K;
-    }
-
-    public King getPlayer2King() {
-        return player2K;
-    }
 }

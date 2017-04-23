@@ -20,7 +20,9 @@ public class King extends Piece{
         }
     }
     
-   
+   public static double distance(Point a, Point b){
+       return Math.sqrt(Math.pow(a.x-b.x, 2) + Math.pow(a.y-b.y, 2));
+   }
    protected void updateThreateningLocations(){
        threateningLocations.clear();
        Piece[][] backup =  new Piece[8][8];
@@ -57,7 +59,32 @@ public class King extends Piece{
                                 }
                             }
                        }
-                       if (add){
+                       Point other = null;
+                       if (owner == "player1"){
+                           for (int rowi = 0; rowi < 8; rowi++) {
+                                for (int coli = 0; coli < 8; coli++) {
+                                    if (game.getChessBoard().board[rowi][coli] != null){
+                                        if (game.getChessBoard().board[rowi][coli].id == 'k'){
+                                            other = game.getChessBoard().board[rowi][coli].location;
+                                        }
+                                    }
+                                }
+                           }
+                       }
+                       else{
+                           for (int rowi = 0; rowi < 8; rowi++) {
+                                for (int coli = 0; coli < 8; coli++) {
+                                    if (game.getChessBoard().board[rowi][coli] != null){
+                                        if (game.getChessBoard().board[rowi][coli].id == 'K'){
+                                            other = game.getChessBoard().board[rowi][coli].location;
+                                        }
+                                    }
+                                }
+                           }
+                       }
+                       //Prevent Kings from threatening each other
+                       //Adding other king to update threatening would cause infinite recursion
+                       if (add && distance(new Point(originalX + curi, originalY + curj), other) >= 2){
                            threateningLocations.add(new Point(originalX + curi, originalY + curj));
                            System.out.println(proposedLocation.toString());
                            System.out.println("INININININ");
