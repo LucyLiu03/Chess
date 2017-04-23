@@ -23,27 +23,36 @@ public class Pawn extends Piece{
         firstMove = true;
     }
     
-//    @Override
-//    protected void updateMovableLocations(){
-//        int oneOffset = 0;
-//        if (owner.equalsIgnoreCase("player1") && location.x <= 6) {
-//            oneOffset = 1;
-//        } 
-//        else if (owner.equalsIgnoreCase("player2") && location.x >= 1) {
-//            oneOffset = -1;
-//        }
-//        movableLocations.clear();
-//        
-//    }
+    @Override
+    protected void updateMovableLocations(){
+        int oneOffset = 0;
+        if (owner.equalsIgnoreCase("player1") && location.x >= 1) {
+            oneOffset = -1;
+        } 
+        else if (owner.equalsIgnoreCase("player2") && location.x <= 6) {
+            oneOffset = 1;
+        }
+        movableLocations.clear();
+        if (oneOffset != 0 && !game.getChessBoard().isPieceAt(location.x+oneOffset, location.y) && ChessBoard.locationInBounds(new Point(location.x+oneOffset, location.y))){
+            movableLocations.add(new Point(location.x+oneOffset, location.y));
+            if (firstMove){
+                Point proposedLocation = new Point(location.x + oneOffset*2, location.y);
+                if (ChessBoard.locationInBounds(proposedLocation) && !game.getChessBoard().isPieceAt(location.x+oneOffset*2, location.y)){
+                    movableLocations.add(proposedLocation);
+                }
+            }
+        }
+        
+    }
     
     @Override
     protected void updateThreateningLocations() {
         int oneOffset = 0;
-        if (owner.equalsIgnoreCase("player1") && location.x <= 6) {
-            oneOffset = 1;
-        } 
-        else if (owner.equalsIgnoreCase("player2") && location.x >= 1) {
+        if (owner.equalsIgnoreCase("player1") && location.x >= 1) {
             oneOffset = -1;
+        } 
+        else if (owner.equalsIgnoreCase("player2") && location.x <= 6) {
+            oneOffset = 1;
         }
 
         threateningLocations.clear();
@@ -63,15 +72,15 @@ public class Pawn extends Piece{
                 System.out.println("sadasdas2d");
             }
         }
-        
-        if (oneOffset != 0 && !game.getChessBoard().isPieceAt(location.x+oneOffset, location.y) && ChessBoard.locationInBounds(new Point(location.x+oneOffset, location.y))){
-            threateningLocations.add(new Point(location.x+oneOffset, location.y));
-            if (firstMove){
-                Point proposedLocation = new Point(location.x + oneOffset*2, location.y);
-                if (ChessBoard.locationInBounds(proposedLocation) && !game.getChessBoard().isPieceAt(location.x+oneOffset*2, location.y)){
-                    threateningLocations.add(proposedLocation);
-                }
-            }
-        }
+        updateMovableLocations();
+//        if (oneOffset != 0 && !game.getChessBoard().isPieceAt(location.x+oneOffset, location.y) && ChessBoard.locationInBounds(new Point(location.x+oneOffset, location.y))){
+//            threateningLocations.add(new Point(location.x+oneOffset, location.y));
+//            if (firstMove){
+//                Point proposedLocation = new Point(location.x + oneOffset*2, location.y);
+//                if (ChessBoard.locationInBounds(proposedLocation) && !game.getChessBoard().isPieceAt(location.x+oneOffset*2, location.y)){
+//                    threateningLocations.add(proposedLocation);
+//                }
+//            }
+//        }
     }
 }

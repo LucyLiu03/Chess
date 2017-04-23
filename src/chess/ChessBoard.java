@@ -26,7 +26,7 @@ import javax.swing.JFrame;
  * @author advai
  */
 public class ChessBoard {
-    private Piece[][] board;
+    public Piece[][] board;
     int row, col = 8;
     JFrame graphics;    
     JButton[][] buttons;
@@ -56,6 +56,7 @@ public class ChessBoard {
             ((Pawn)piece).firstMove = false;
         }
         if (isPieceAt(location.x, location.y)) {
+            System.out.println("CUR2" + location.toString());
             removePieceAt(location);
         }
         if (piece.location != null) {
@@ -132,21 +133,52 @@ public class ChessBoard {
                     if (curMove != null){
                         if (board[curMove.x][curMove.y].threateningLocations.contains(new Point(finalI, finalJ))){
                             placePieceAt(board[curMove.x][curMove.y], new Point(finalI, finalJ));
+                            System.out.println("CUR" + curMove.toString());
                             updateGraphics();
                             if (curPlayer.equals("player1")){
-                            curPlayer = "player2";
+                                curPlayer = "player2";
                             }
                             else{
                                 curPlayer = "player1";
                             }
                             curMove = null;
                         }
+                    if (curMove != null){
+                        if (board[curMove.x][curMove.y].movableLocations.contains(new Point(finalI, finalJ))){
+                            placePieceAt(board[curMove.x][curMove.y], new Point(finalI, finalJ));
+                            System.out.println("CUR" + curMove.toString());
+                            updateGraphics();
+                            if (curPlayer.equals("player1")){
+                                curPlayer = "player2";
+                            }
+                            else{
+                                curPlayer = "player1";
+                            }
+                            curMove = null;
+                        }
+                    }
+                    String output = "  0 1 2 3 4 5 6 7\n";
+                    for (int rowi = 0; rowi < 8; rowi++) {
+                        output += rowi;
+                        for (int coli = 0; coli < 8; coli++) {
+                            if (board[rowi][coli] != null) {
+                                output += " " + board[rowi][coli].id;
+                            } else {
+                                output += " -";
+                            }
+                        }
+                        output += "\n";
+                    }
+                    System.out.println(output);
+                    System.out.println("hereew");
                         
                     }
                     if (board[finalI][finalJ] != null && board[finalI][finalJ].owner.equals(curPlayer)){                        
-                        board[finalI][finalJ].updateThreateningLocations();                        
+                        board[finalI][finalJ].updateThreateningLocations();                      
                         resetBackgrounds();
                         buttons[finalI][finalJ].setBackground(Color.CYAN);
+                        System.out.println(board[finalI][finalJ].threateningLocations);
+                        System.out.println(board[finalI][finalJ].movableLocations);
                         if (board[finalI][finalJ].threateningLocations.size() != 0){
                             for (int loc = 0; loc < board[finalI][finalJ].threateningLocations.size(); loc++){
                                 if (isPieceAt(board[finalI][finalJ].threateningLocations.get(loc).x, board[finalI][finalJ].threateningLocations.get(loc).y)){
@@ -154,7 +186,14 @@ public class ChessBoard {
                                 }
                                 else{
                                     buttons[board[finalI][finalJ].threateningLocations.get(loc).x][board[finalI][finalJ].threateningLocations.get(loc).y].setBackground(Color.GREEN);
-                                }
+                                }                                
+                            }
+                            
+                            curMove = new Point(finalI, finalJ);
+                        }
+                        if (board[finalI][finalJ].movableLocations.size() != 0){
+                            for (int loc = 0; loc < board[finalI][finalJ].movableLocations.size(); loc++){
+                                buttons[board[finalI][finalJ].movableLocations.get(loc).x][board[finalI][finalJ].movableLocations.get(loc).y].setBackground(Color.GREEN);
                             }
                             curMove = new Point(finalI, finalJ);
                         }
@@ -168,8 +207,8 @@ public class ChessBoard {
         updateGraphics();
     }
     public void resetBackgrounds(){
-        Color c2 = new Color (139,69,19);
-        Color c1 = new Color (222,184,135);
+        Color c1 = new Color (139,69,19);
+        Color c2 = new Color (222,184,135);
         for (int i = 0; i < 8; i++){
             for (int j = 0; j < 8; j++){
                 if ((i%2==0 && j%2==0)|| (i%2 != 0 && j%2 != 0)){
@@ -182,8 +221,8 @@ public class ChessBoard {
         }
     }
     public void updateGraphics(){
-        Color c2 = new Color (139,69,19);
-        Color c1 = new Color (222,184,135);
+        Color c1 = new Color (139,69,19);
+        Color c2 = new Color (222,184,135);
         for (int i = 0; i < 8; i++){
             for (int j = 0; j < 8; j++){
                 if ((i%2==0 && j%2==0)|| (i%2 != 0 && j%2 != 0)){
@@ -218,6 +257,19 @@ public class ChessBoard {
                 }
             }
         }
+    }
+    public void updateAllThreateningLocations(){
+        for (int rowi = 0; rowi < 8; rowi++) {
+            for (int coli = 0; coli < 8; coli++) {
+                if (board[rowi][coli]!= null && !(board[rowi][coli] instanceof King)){
+                    board[rowi][coli].updateThreateningLocations();
+//                    System.out.println(rowi + " " +coli);
+                }                
+            }
+        }
+    }
+    public void setChessBoard(Piece[][] newBoard){
+        board = newBoard;
     }
       
     @Override

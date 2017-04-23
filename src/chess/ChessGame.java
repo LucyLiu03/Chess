@@ -17,8 +17,8 @@ public class ChessGame {
     
     public ChessGame() {
         chessBoard = new ChessBoard();
-        setupTeam(0, "player1");
-        setupTeam(7, "player2");
+        setupTeam(0, "player2");
+        setupTeam(7, "player1");
         System.out.println("DONEONDOEMN");
     }
     
@@ -47,11 +47,11 @@ public class ChessGame {
 
         //King
         if (player.equalsIgnoreCase("player1")) {
-            player1K = new King(player, new Point(homeRow, colIncrement), this);
-            Piece q = new Queen(player, new Point(homeRow, 7-colIncrement), this);
+            Piece k = new King(player, new Point(homeRow, colIncrement+1), this);
+            Piece q = new Queen(player, new Point(homeRow, 6-colIncrement), this);
         } else {
-            player2K = new King(player, new Point(homeRow, colIncrement+1), this);
-            Piece q = new Queen(player, new Point(homeRow, 7-colIncrement-1), this);
+            Piece k = new King(player, new Point(homeRow, colIncrement+1), this);
+            Piece q = new Queen(player, new Point(homeRow, 6-colIncrement), this);
         }       
         
 
@@ -59,6 +59,8 @@ public class ChessGame {
         for (int i = 0; i < 8; i++) {
             Piece p = new Pawn(player, new Point(homeRow + oneOffsetPawn, i), this);
         }
+        this.getChessBoard().toString();
+        System.out.println("hereew");
     }
     
 

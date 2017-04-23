@@ -16,7 +16,7 @@ public abstract class Piece {
     Point location;
     char id;
     ArrayList<Point> threateningLocations;
-//    ArrayList<Point> movableLocations;
+    ArrayList<Point> movableLocations;
     ChessGame game;
 //    boolean firstMove;
     
@@ -24,7 +24,7 @@ public abstract class Piece {
         this.owner = owner;
         Point location = initialLocation;
         threateningLocations = new ArrayList<>();
-//        movableLocations = new ArrayList<>();
+        movableLocations = new ArrayList<>();
         this.game = cGame;
         game.getChessBoard().placePieceAt(this, initialLocation);
         //IMPROVE THIS BOOLEAN
@@ -95,9 +95,9 @@ public abstract class Piece {
     
     protected void updateThreateningLocations(){};
     
-//    protected void updateMovableLocations(){
-//        movableLocations = threateningLocations;
-//    };
+    protected void updateMovableLocations(){
+        movableLocations = threateningLocations;
+    };
     
     public void printThreateningLocations(){
         for (int i = 0; i < threateningLocations.size(); i++){
