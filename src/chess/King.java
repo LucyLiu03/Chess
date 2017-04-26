@@ -60,6 +60,7 @@ public class King extends Piece{
                             }
                        }
                        Point other = null;
+                       //simplify this - MAKE BETTER
                        if (owner == "player1"){
                            for (int rowi = 0; rowi < 8; rowi++) {
                                 for (int coli = 0; coli < 8; coli++) {

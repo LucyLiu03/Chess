@@ -20,6 +20,8 @@ import javax.imageio.ImageIO;
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JFrame;
+import javax.swing.JLabel;
+import javax.swing.JPanel;
 
 /**
  *
@@ -28,16 +30,19 @@ import javax.swing.JFrame;
 public class ChessBoard {
     public Piece[][] board;
     int row, col = 8;
-    JFrame graphics;    
+    JPanel boardPanel;
+    JFrame graphicsFrame;
     JButton[][] buttons;
     String curPlayer;
     Point curMove;
+    ChessGame curGame;
 
-    public ChessBoard() {
+    public ChessBoard(ChessGame game) {
         board = new Piece[8][8];
         buttons = new JButton[8][8];
         curPlayer = "player1";
         curMove = null;
+        curGame = game;
     }
 
     public boolean isPieceAt(int row, int col) {
@@ -52,6 +57,7 @@ public class ChessBoard {
     }
 
     public void placePieceAt(Piece piece, Point location) {
+        //Check if the piece is of the Pawn type. If it is then ensure that its firstMove attribute is set to false
         if (piece instanceof Pawn && ((Pawn)piece).firstMove){
             ((Pawn)piece).firstMove = false;
         }
@@ -92,20 +98,46 @@ public class ChessBoard {
          
     }
     public void createGraphics(int row, int col){
-        graphics = new JFrame();
+        graphicsFrame = new JFrame();
         
-        graphics.setTitle("Chess");
-        graphics.setSize(800, 800);
-        graphics.setBackground(Color.black);
-        Container pane = graphics.getContentPane();
-         
-        pane.setLayout(new GridLayout (row, col));
+        graphicsFrame.setTitle("Chess");
+        graphicsFrame.setSize(800, 800);
+        graphicsFrame.setBackground(Color.black);
+//        graphics.setVisible(true);
+        
+        boardPanel = new JPanel();
+        JPanel sidebar = new JPanel();
+        final JLabel curImageLabel = new JLabel();
+        Image logoImage = null;
+        try {
+            logoImage = ImageIO.read(new File(String.format("logo.png")));
+        } catch (IOException ex) {
+            Logger.getLogger(ChessBoard.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        ImageIcon logoIcon = new ImageIcon(logoImage.getScaledInstance(200, 250, java.awt.Image.SCALE_SMOOTH));
+        JLabel logoLabel = new JLabel();
+        logoLabel.setIcon(logoIcon);
+        sidebar.add(logoLabel);
+        sidebar.add(curImageLabel);
+        sidebar.setBackground(new Color(134, 0, 179));
+        final String blackLabel = "<html><div style='text-align: center;'><font color='yellow'>Current Player: </font><br><font color='black'>Black</font></div></html>";
+        final String whiteLabel = "<html><div style='text-align: center;'><font color='yellow'>Current Player: </font><br><font color='white'>White</font></div></html>";
+        final JLabel description = new JLabel(whiteLabel);
+        description.setFont(new Font("TimesRoman", Font.BOLD, 26));
+        final ImageIcon curPiece = new ImageIcon();
+//        description.setAlignmentX(50);
+        sidebar.setPreferredSize(new Dimension (200, 800));
+        sidebar.add(description, BorderLayout.CENTER);
+        graphicsFrame.add(sidebar, BorderLayout.EAST);
+        boardPanel.setLayout(new GridLayout (row, col));
+        graphicsFrame.add(boardPanel);
         Dimension d = new Dimension (100, 100);
 //        try {
 //            initializeImages();
 //        } catch (IOException ex) {
 //            Logger.getLogger(ChessBoard.class.getName()).log(Level.SEVERE, null, ex);
 //        }
+        
         for (int i = 0; i < 8; i++){
             for (int j = 0; j < 8; j++){
                 
@@ -122,85 +154,129 @@ public class ChessBoard {
 //                buttons[i][j].setBackground(c1);
 //            }
             buttons[i][j].setBorderPainted(false);
-            pane.add(buttons[i][j]);
-            
+            boardPanel.add(buttons[i][j]);
             final int finalI = i;
             final int finalJ = j;
-            
             buttons[i][j].addActionListener(new ActionListener(){
                 @Override
                 public void actionPerformed(ActionEvent arg0) {
-                    if (curMove != null){
-                        if (board[curMove.x][curMove.y].threateningLocations.contains(new Point(finalI, finalJ))){
-                            placePieceAt(board[curMove.x][curMove.y], new Point(finalI, finalJ));
-                            System.out.println("CUR" + curMove.toString());
-                            updateGraphics();
-                            if (curPlayer.equals("player1")){
-                                curPlayer = "player2";
-                            }
-                            else{
-                                curPlayer = "player1";
-                            }
-                            curMove = null;
-                        }
-                    if (curMove != null){
-                        if (board[curMove.x][curMove.y].movableLocations.contains(new Point(finalI, finalJ))){
-                            placePieceAt(board[curMove.x][curMove.y], new Point(finalI, finalJ));
-                            System.out.println("CUR" + curMove.toString());
-                            updateGraphics();
-                            if (curPlayer.equals("player1")){
-                                curPlayer = "player2";
-                            }
-                            else{
-                                curPlayer = "player1";
-                            }
-                            curMove = null;
-                        }
-                    }
-                    String output = "  0 1 2 3 4 5 6 7\n";
-                    for (int rowi = 0; rowi < 8; rowi++) {
-                        output += rowi;
-                        for (int coli = 0; coli < 8; coli++) {
-                            if (board[rowi][coli] != null) {
-                                output += " " + board[rowi][coli].id;
-                            } else {
-                                output += " -";
-                            }
-                        }
-                        output += "\n";
-                    }
-                    System.out.println(output);
-                    System.out.println("hereew");
-                        
-                    }
-                    if (board[finalI][finalJ] != null && board[finalI][finalJ].owner.equals(curPlayer)){                        
-                        board[finalI][finalJ].updateThreateningLocations();                      
-                        resetBackgrounds();
-                        buttons[finalI][finalJ].setBackground(Color.CYAN);
-                        System.out.println(board[finalI][finalJ].threateningLocations);
-                        System.out.println(board[finalI][finalJ].movableLocations);
-                        if (board[finalI][finalJ].threateningLocations.size() != 0){
-                            for (int loc = 0; loc < board[finalI][finalJ].threateningLocations.size(); loc++){
-                                if (isPieceAt(board[finalI][finalJ].threateningLocations.get(loc).x, board[finalI][finalJ].threateningLocations.get(loc).y)){
-                                    buttons[board[finalI][finalJ].threateningLocations.get(loc).x][board[finalI][finalJ].threateningLocations.get(loc).y].setBackground(Color.RED);
+//                    if (board[finalI][finalJ] != null && board[finalI][finalJ] instanceof Pawn 
+//                            && (board[finalI][finalJ].location.x == 7 || board[finalI][finalJ].location.x == 0)){
+//                        if (board[finalI][finalJ].location.x == 7){
+//                            board[finalI][finalJ] = new Queen("player1", board[finalI][finalJ].location, curGame);
+//                        }
+//                        updateGraphics();
+//                    }
+//                    else{
+                        if (curMove != null){
+                            if (board[curMove.x][curMove.y].threateningLocations.contains(new Point(finalI, finalJ)) || board[curMove.x][curMove.y].movableLocations.contains(new Point(finalI, finalJ))){
+                                placePieceAt(board[curMove.x][curMove.y], new Point(finalI, finalJ));
+                                if (board[finalI][finalJ] instanceof Pawn && 
+                                        (board[finalI][finalJ].location.x == 7 || board[finalI][finalJ].location.x == 0)){
+                                    if (board[finalI][finalJ].location.x == 0){
+                                        board[finalI][finalJ] = new Queen("player1", board[finalI][finalJ].location, curGame);
+                                    }
+                                    else{
+                                        board[finalI][finalJ] = new Queen("player2", board[finalI][finalJ].location, curGame);
+                                    }
+                                }
+                                System.out.println("CUR" + curMove.toString());
+                                updateGraphics();
+                                if (curPlayer.equals("player1")){
+                                    curPlayer = "player2";
+                                    description.setText(blackLabel);
                                 }
                                 else{
-                                    buttons[board[finalI][finalJ].threateningLocations.get(loc).x][board[finalI][finalJ].threateningLocations.get(loc).y].setBackground(Color.GREEN);
-                                }                                
+                                    curPlayer = "player1";                                
+                                    description.setText(whiteLabel);
+                                }
+                                curMove = null;
+                            }
+//                        if (curMove != null){
+//                            if (board[curMove.x][curMove.y].movableLocations.contains(new Point(finalI, finalJ))){
+//                                placePieceAt(board[curMove.x][curMove.y], new Point(finalI, finalJ));
+//                                System.out.println("CUR" + curMove.toString());
+//                                updateGraphics();
+//                                if (curPlayer.equals("player1")){
+//                                    curPlayer = "player2";                                
+//                                    description.setText(blackLabel);
+//                                }
+//                                else{
+//                                    curPlayer = "player1";                                
+//                                    description.setText(whiteLabel);
+//                                }
+//                                curMove = null;
+//                            }
+//                        }
+//                        String output = "  0 1 2 3 4 5 6 7\n";
+//                        for (int rowi = 0; rowi < 8; rowi++) {
+//                            output += rowi;
+//                            for (int coli = 0; coli < 8; coli++) {
+//                                if (board[rowi][coli] != null) {
+//                                    output += " " + board[rowi][coli].id;
+//                                } else {
+//                                    output += " -";
+//                                }
+//                            }
+//                            output += "\n";
+//                        }
+//                        System.out.println(output);
+//                        System.out.println("hereew");
+
+                        }
+                        if (board[finalI][finalJ] != null && board[finalI][finalJ].owner.equals(curPlayer)){
+                            //if instanceof Pawn and board[i][j].location.x == 0 or 7
+                            //board[i]
+                            board[finalI][finalJ].updateThreateningLocations();                      
+                            resetBackgrounds();
+                            buttons[finalI][finalJ].setBackground(Color.CYAN);
+                            System.out.println(board[finalI][finalJ].threateningLocations);
+                            System.out.println(board[finalI][finalJ].movableLocations);
+                            if (board[finalI][finalJ].threateningLocations.size() != 0){
+                                for (int loc = 0; loc < board[finalI][finalJ].threateningLocations.size(); loc++){
+                                    if (isPieceAt(board[finalI][finalJ].threateningLocations.get(loc).x, board[finalI][finalJ].threateningLocations.get(loc).y)){
+                                        buttons[board[finalI][finalJ].threateningLocations.get(loc).x][board[finalI][finalJ].threateningLocations.get(loc).y].setBackground(Color.RED);
+                                    }
+                                    else{
+                                        buttons[board[finalI][finalJ].threateningLocations.get(loc).x][board[finalI][finalJ].threateningLocations.get(loc).y].setBackground(Color.GREEN);
+                                    }                                
+                                }
+
+                                curMove = new Point(finalI, finalJ);
+                            }
+                            if (board[finalI][finalJ].movableLocations.size() != 0){
+                                for (int loc = 0; loc < board[finalI][finalJ].movableLocations.size(); loc++){
+                                    buttons[board[finalI][finalJ].movableLocations.get(loc).x][board[finalI][finalJ].movableLocations.get(loc).y].setBackground(Color.GREEN);
+                                }
+                                curMove = new Point(finalI, finalJ);
                             }
                             
-                            curMove = new Point(finalI, finalJ);
                         }
-                        if (board[finalI][finalJ].movableLocations.size() != 0){
-                            for (int loc = 0; loc < board[finalI][finalJ].movableLocations.size(); loc++){
-                                buttons[board[finalI][finalJ].movableLocations.get(loc).x][board[finalI][finalJ].movableLocations.get(loc).y].setBackground(Color.GREEN);
+                        if (board[finalI][finalJ] != null){
+                            Image curImg = null;
+
+                            if (getPieceAt(new Point(finalI, finalJ)).owner.equals("player1")){                    
+                                try {
+                                    curImg = ImageIO.read(new File(String.format(getPieceAt(new Point(finalI, finalJ)).id+".png")));
+                                } catch (IOException ex) {
+                                    Logger.getLogger(ChessBoard.class.getName()).log(Level.SEVERE, null, ex);
+                                }
                             }
-                            curMove = new Point(finalI, finalJ);
+                            else{
+                                try {
+                                    curImg = ImageIO.read(new File(String.format(getPieceAt(new Point(finalI, finalJ)).id+"-black.png")));
+                                } catch (IOException ex) {
+                                    Logger.getLogger(ChessBoard.class.getName()).log(Level.SEVERE, null, ex);
+                                }
+                            }
+                            ImageIcon curIcon = new ImageIcon(curImg.getScaledInstance(200, 200, java.awt.Image.SCALE_SMOOTH));
+    //                        curPlayerImage = curIcon;
+                            curImageLabel.setIcon(curIcon);
                         }
                     }
 //                        System.out.println(Integer.toString(finalI) + Integer.toString(finalJ));
                
-                }
+//                }
             });
             }
         }

@@ -28,7 +28,7 @@ public class Chess {
         System.out.println("---------------");
         
         cgame.getChessBoard().createGraphics(8, 8);
-        cgame.getChessBoard().placePieceAt(cgame.getChessBoard().getPieceAt(new Point (0, 4)), new Point(3, 3));
+        cgame.getChessBoard().placePieceAt(cgame.getChessBoard().getPieceAt(new Point (1, 2)), new Point(6, 1));
         cgame.getChessBoard().updateGraphics();
         cgame.getChessBoard().getPieceAt(new Point (0, 6)).updateThreateningLocations();
         cgame.getChessBoard().getPieceAt(new Point (0, 6)).printThreateningLocations();
@@ -47,9 +47,9 @@ public class Chess {
         cgame.getChessBoard().getPieceAt(new Point (1, 1)).printThreateningLocations();
         System.out.println("----");
 //        cgame.getChessBoard().getPieceAt(new Point (1, 1)).printMovableLocations();
-        cgame.getChessBoard().graphics.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        cgame.getChessBoard().graphics.pack();
-        cgame.getChessBoard().graphics.setVisible(true);
+        cgame.getChessBoard().graphicsFrame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        cgame.getChessBoard().graphicsFrame.pack();
+        cgame.getChessBoard().graphicsFrame.setVisible(true);
         
         
     }

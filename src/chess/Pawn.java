@@ -33,6 +33,7 @@ public class Pawn extends Piece{
             oneOffset = 1;
         }
         movableLocations.clear();
+        System.out.println(oneOffset + "ooo");
         if (oneOffset != 0 && !game.getChessBoard().isPieceAt(location.x+oneOffset, location.y) && ChessBoard.locationInBounds(new Point(location.x+oneOffset, location.y))){
             movableLocations.add(new Point(location.x+oneOffset, location.y));
             if (firstMove){
@@ -56,23 +57,24 @@ public class Pawn extends Piece{
         }
 
         threateningLocations.clear();
-        
-        //Diagonally opposite squares are being threatened
-        //Column to the left of the current square if possible (needs to be in board bounds)
-        if (location.y >= 1 && game.getChessBoard().isPieceAt(location.x + oneOffset, location.y - 1)) {
-            if (!game.getChessBoard().getPieceOwner(new Point(location.x + oneOffset, location.y - 1)).equals(owner)){
-                threateningLocations.add(new Point(location.x + oneOffset, location.y - 1));
+        if (oneOffset != 0){
+            //Diagonally opposite squares are being threatened
+            //Column to the left of the current square if possible (needs to be in board bounds)
+            if (location.y >= 1 && game.getChessBoard().isPieceAt(location.x + oneOffset, location.y - 1)) {
+                if (!game.getChessBoard().getPieceOwner(new Point(location.x + oneOffset, location.y - 1)).equals(owner)){
+                    threateningLocations.add(new Point(location.x + oneOffset, location.y - 1));
+                }
             }
-        }
-        //Column to the right of the current square if possible (needs to be in board bounds)
-        if (location.y <= 6 && game.getChessBoard().isPieceAt(location.x + oneOffset, location.y + 1)) {
-            if (!game.getChessBoard().getPieceOwner(new Point(location.x + oneOffset, location.y + 1)).equals(owner)){
-                threateningLocations.add(new Point(location.x + oneOffset, location.y + 1));
-                //TODO FIX END PAWN ACTION
-                System.out.println("sadasdas2d");
+            //Column to the right of the current square if possible (needs to be in board bounds)
+            if (location.y <= 6 && game.getChessBoard().isPieceAt(location.x + oneOffset, location.y + 1)) {
+                if (!game.getChessBoard().getPieceOwner(new Point(location.x + oneOffset, location.y + 1)).equals(owner)){
+                    threateningLocations.add(new Point(location.x + oneOffset, location.y + 1));
+                    //TODO FIX END PAWN ACTION
+                    System.out.println("sadasdas2d");
+                }
             }
+            updateMovableLocations();
         }
-        updateMovableLocations();
 //        if (oneOffset != 0 && !game.getChessBoard().isPieceAt(location.x+oneOffset, location.y) && ChessBoard.locationInBounds(new Point(location.x+oneOffset, location.y))){
 //            threateningLocations.add(new Point(location.x+oneOffset, location.y));
 //            if (firstMove){

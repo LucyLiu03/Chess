@@ -16,7 +16,7 @@ public class ChessGame {
 
     
     public ChessGame() {
-        chessBoard = new ChessBoard();
+        chessBoard = new ChessBoard(this);
         setupTeam(0, "player2");
         setupTeam(7, "player1");
         System.out.println("DONEONDOEMN");
