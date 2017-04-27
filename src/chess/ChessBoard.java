@@ -114,14 +114,21 @@ public class ChessBoard {
 //        Point kLocation;
 //        char id;
 //        if (player == "player1"){
-//            id = "K";
+//            id = 'K';
 //        }
-//        if (player == "player2"){
-//            id = "k";
+//        else {
+//            id = 'k';
 //        }
 //        for (int i = 0; i < 8; i ++){
 //            for (int j = 0; j < 8; j++){
-//                if board[i][j]
+//                if (board[i][j] != null && board[i][j].id == id){
+//                    kLocation = board[i][j].location;
+//                }
+//            }
+//        }
+//        updateAllThreateningLocations();
+//        for (int i = 0; i < 8; i ++){
+//            for (int j = 0; j < 8; j++){
 //            }
 //        }
 //    }
