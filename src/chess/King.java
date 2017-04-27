@@ -34,6 +34,7 @@ public class King extends Piece{
        System.out.println("ASDAS" + location.toString());
        int originalX = location.x;
        int originalY = location.y;
+       //MAKE BETTER - ONLY BACKUP KING CUR AND KING NEW
        for (int curi = -1; curi<=1; curi++){
            for( int curj = -1; curj<=1; curj++){
                System.out.println("WADADADADADAAD");

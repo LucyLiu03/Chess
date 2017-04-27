@@ -23,7 +23,7 @@ public class Chess {
      */
     public static void main(String[] args) {
         ChessGame cgame = new ChessGame();
-        System.out.println(cgame.getChessBoard().toString());
+        System.out.println(cgame.getChessBoard().boardToText());
         System.out.println("---------------------");
         System.out.println("---------------");
         
@@ -33,7 +33,7 @@ public class Chess {
         cgame.getChessBoard().getPieceAt(new Point (0, 6)).updateThreateningLocations();
         cgame.getChessBoard().getPieceAt(new Point (0, 6)).printThreateningLocations();
         System.out.println("sadasdasdsadsadsda");
-        System.out.println(cgame.getChessBoard().toString());
+        System.out.println(cgame.getChessBoard().boardToText());
 //        ChessBoard gt = new ChessBoard();
 //        try {
 //            gt.chessBoard(8, 8);

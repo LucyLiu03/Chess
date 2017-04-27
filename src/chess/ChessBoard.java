@@ -17,11 +17,15 @@ import java.io.IOException;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.imageio.ImageIO;
+import javax.swing.BoxLayout;
+import javax.swing.ButtonGroup;
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
+import javax.swing.JDialog;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
+import javax.swing.JRadioButton;
 
 /**
  *
@@ -36,6 +40,7 @@ public class ChessBoard {
     String curPlayer;
     Point curMove;
     ChessGame curGame;
+    boolean inPromotion;
 
     public ChessBoard(ChessGame game) {
         board = new Piece[8][8];
@@ -43,6 +48,7 @@ public class ChessBoard {
         curPlayer = "player1";
         curMove = null;
         curGame = game;
+        inPromotion = false;
     }
 
     public boolean isPieceAt(int row, int col) {
@@ -97,6 +103,28 @@ public class ChessBoard {
          }
          
     }
+    public static void sleep(int duration) {
+        try {
+            Thread.sleep(duration);
+        } 
+        catch (Exception e) {}
+    }
+    
+//    public boolean inCheck(String player){
+//        Point kLocation;
+//        char id;
+//        if (player == "player1"){
+//            id = "K";
+//        }
+//        if (player == "player2"){
+//            id = "k";
+//        }
+//        for (int i = 0; i < 8; i ++){
+//            for (int j = 0; j < 8; j++){
+//                if board[i][j]
+//            }
+//        }
+//    }
     public void createGraphics(int row, int col){
         graphicsFrame = new JFrame();
         
@@ -173,12 +201,143 @@ public class ChessBoard {
                                 placePieceAt(board[curMove.x][curMove.y], new Point(finalI, finalJ));
                                 if (board[finalI][finalJ] instanceof Pawn && 
                                         (board[finalI][finalJ].location.x == 7 || board[finalI][finalJ].location.x == 0)){
-                                    if (board[finalI][finalJ].location.x == 0){
-                                        board[finalI][finalJ] = new Queen("player1", board[finalI][finalJ].location, curGame);
-                                    }
-                                    else{
-                                        board[finalI][finalJ] = new Queen("player2", board[finalI][finalJ].location, curGame);
-                                    }
+//                                    String type = "Knight";
+//                                    Class<?> clazz;
+//                                    try {
+//                                        clazz = Class.forName(type);
+//                                        Piece board[finalI][finalJ] = (Piece) clazz.w;
+//                                        
+//                                    } catch (Exception e) {
+//                                        e.printStackTrace();
+//                                    }
+                                    final JFrame promotionFrame = new JFrame();
+                                    JPanel promotionPanel = new JPanel();
+                                    JLabel description = new JLabel("Select a piece to promote the pawn to: ");
+                                    description.setFont(new Font("TimesRoman", Font.BOLD, 20));
+                                    JButton queenB = new JButton("Queen");
+                                    JDialog promotionDialog = new JDialog();
+                                    JRadioButton qOption = new JRadioButton("Queen");
+                                    JRadioButton nOption = new JRadioButton("Knight");
+                                    JRadioButton rOption = new JRadioButton("Rook");
+                                    JRadioButton bOption = new JRadioButton("Bishop");
+                                    inPromotion = true;
+//                                    promotionPanel.setLayout();
+                                    promotionPanel.add(description);
+                                    promotionPanel.add(qOption);
+                                    qOption.addActionListener(new ActionListener(){
+
+                                        @Override
+                                        public void actionPerformed(ActionEvent e) {
+                                            String prevPlayer;
+                                            if (curPlayer == "player1"){
+                                                prevPlayer = "player2";
+                                            }
+                                            else{
+                                                prevPlayer = "player1";
+                                            }
+                                            board[finalI][finalJ] = new Queen(prevPlayer, board[finalI][finalJ].location, curGame);
+                                            inPromotion = false;
+                                            updateGraphics();
+                                            promotionFrame.dispose();
+                                        }
+                                        
+                                    });
+                                    promotionPanel.add(nOption);
+                                    nOption.addActionListener(new ActionListener(){
+
+                                        @Override
+                                        public void actionPerformed(ActionEvent e) {
+                                            String prevPlayer;
+                                            if (curPlayer == "player1"){
+                                                prevPlayer = "player2";
+                                            }
+                                            else{
+                                                prevPlayer = "player1";
+                                            }
+                                            board[finalI][finalJ] = new Knight(prevPlayer, board[finalI][finalJ].location, curGame);
+                                            inPromotion = false;
+                                            updateGraphics();
+                                            promotionFrame.dispose();
+                                        }
+                                        
+                                    });
+                                    promotionPanel.add(rOption);
+                                    rOption.addActionListener(new ActionListener(){
+
+                                        @Override
+                                        public void actionPerformed(ActionEvent e) {
+                                            String prevPlayer;
+                                            if (curPlayer == "player1"){
+                                                prevPlayer = "player2";
+                                            }
+                                            else{
+                                                prevPlayer = "player1";
+                                            }
+                                            board[finalI][finalJ] = new Rook(prevPlayer, board[finalI][finalJ].location, curGame);
+                                            inPromotion = false;
+                                            updateGraphics();
+                                            promotionFrame.dispose();
+                                        }
+                                        
+                                    });
+                                    promotionPanel.add(bOption);
+                                    bOption.addActionListener(new ActionListener(){
+
+                                        @Override
+                                        public void actionPerformed(ActionEvent e) {
+                                            String prevPlayer;
+                                            if (curPlayer == "player1"){
+                                                prevPlayer = "player2";
+                                            }
+                                            else{
+                                                prevPlayer = "player1";
+                                            }
+                                            board[finalI][finalJ] = new Bishop(prevPlayer, board[finalI][finalJ].location, curGame);
+                                            inPromotion = false;
+                                            updateGraphics();
+                                            promotionFrame.dispose();
+                                        }
+                                        
+                                    });
+                                    promotionPanel.setPreferredSize(new Dimension(400, 100));
+                                    promotionFrame.add(promotionPanel);
+                                    promotionPanel.setVisible(true);
+                                    promotionFrame.pack();
+                                    promotionFrame.setVisible(true);
+//                                    updateGraphics();
+//                                    sleep(2000);
+//                                    if (qOption.isSelected() || nOption.isSelected() || rOption.isSelected() 
+//                                            || bOption.isSelected() || pOption.isSelected()){
+//                                        if (qOption.isSelected()){
+//                                            board[finalI][finalJ] = new Queen(curPlayer, board[finalI][finalJ].location, curGame);
+//                                            updateGraphics();
+//                                            promotionFrame.dispose();
+//                                        }
+//                                        else if (nOption.isSelected()){
+//                                            board[finalI][finalJ] = new Knight(curPlayer, board[finalI][finalJ].location, curGame);
+//                                            updateGraphics();
+//                                            promotionFrame.dispose();
+//                                        }
+//                                        
+//                                    }
+                                    System.out.println("DONE");
+                                    
+//                                    promotionPanel.
+//                                    promotionPanel.add(queenB);
+//                                    ButtonGroup bG = new ButtonGroup();
+//                                    bG.add(male);
+//                                    bG.add(female);
+//                                    promotionPanel.setLayout(new FlowLayout());
+//                                    promotionPanel.add(male);
+//                                    promotionPanel.add(female);
+                                    
+                                    System.out.println("ELLOSDSD");
+//                                    if (board[finalI][finalJ].location.x == 0){
+//                                        board[finalI][finalJ] = new Queen("player1", board[finalI][finalJ].location, curGame);
+//                                    }
+//                                    else{
+//                                        board[finalI][finalJ] = new Queen("player2", board[finalI][finalJ].location, curGame);
+//                                    }
                                 }
                                 System.out.println("CUR" + curMove.toString());
                                 updateGraphics();
@@ -224,7 +383,7 @@ public class ChessBoard {
 //                        System.out.println("hereew");
 
                         }
-                        if (board[finalI][finalJ] != null && board[finalI][finalJ].owner.equals(curPlayer)){
+                        if (board[finalI][finalJ] != null && board[finalI][finalJ].owner.equals(curPlayer) && !inPromotion){
                             //if instanceof Pawn and board[i][j].location.x == 0 or 7
                             //board[i]
                             board[finalI][finalJ].updateThreateningLocations();                      
@@ -273,10 +432,13 @@ public class ChessBoard {
     //                        curPlayerImage = curIcon;
                             curImageLabel.setIcon(curIcon);
                         }
+//                        System.out.println("Current state of board: ");
+//                        System.out.println(boardToText());
                     }
 //                        System.out.println(Integer.toString(finalI) + Integer.toString(finalJ));
                
 //                }
+               
             });
             }
         }
@@ -348,8 +510,7 @@ public class ChessBoard {
         board = newBoard;
     }
       
-    @Override
-    public String toString() {
+    public String boardToText() {
         String output = "  0 1 2 3 4 5 6 7\n";
         for (int rowi = 0; rowi < 8; rowi++) {
             output += rowi;

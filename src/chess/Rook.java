@@ -21,6 +21,7 @@ public class Rook extends Piece{
     }
     @Override
     protected void updateThreateningLocations() {
+        threateningLocations.clear();
         threateningLocations.addAll(getVerticalLocations(1));
         threateningLocations.addAll(getVerticalLocations(-1));
         
