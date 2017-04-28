@@ -69,9 +69,9 @@ public class ChessBoard {
 
     public void placePieceAt(Piece piece, Point location) {
         //Check if the piece is of the Pawn type. If it is then ensure that its firstMove attribute is set to false
-        if (piece instanceof Pawn && ((Pawn)piece).firstMove){
-            ((Pawn)piece).firstMove = false;
-        }
+//        if (piece instanceof Pawn && ((Pawn)piece).firstMove){
+//            ((Pawn)piece).firstMove = false;
+//        }
         if (isPieceAt(location.x, location.y)) {
 //            System.out.println("CUR2" + location.toString());
             removePieceAt(location);
@@ -359,6 +359,9 @@ public class ChessBoard {
                                 }
 //                                System.out.println("CUR" + curMove.toString());
                                 updateGraphics();
+                                if (board[curMove.x][curMove.y] instanceof Pawn && ((Pawn)board[curMove.x][curMove.y]).firstMove){
+                                    ((Pawn)board[curMove.x][curMove.y]).firstMove = false;
+                                }
                                 
                                 if (curPlayer.equals("player1")){
                                     curPlayer = "player2";
