@@ -115,6 +115,155 @@ public class ChessBoard {
         catch (Exception e) {}
     }
     
+    public boolean inCheckMate(String player){  
+        Piece[][] backup =  new Piece[8][8];
+        for (int i = 0; i < 8; i++){
+            System.arraycopy(board[i], 0, backup[i], 0, 8);
+        }
+        updateAllThreateningLocations();
+        for (int i = 0; i < 8; i++){
+            for (int j = 0; j < 8; j++){
+                if (board[i][j] != null && board[i][j].owner == player){
+                    for (int loc = 0; loc < board[i][j].threateningLocations.size(); loc++){
+                        System.out.println(board[i][j].threateningLocations.size());
+                        System.out.println(board[i][j].threateningLocations.get(loc));
+                        placePieceAt(board[i][j], board[i][j].threateningLocations.get(loc));
+                        if (!inCheck(curPlayer)){
+                            System.out.println("NOT IN CHECK");
+                            
+                            for (int rowi = 0; rowi < 8; rowi++){
+                            for (int rowj = 0; rowj < 8; rowj++){
+                                board[rowi][rowj] = backup[rowi][rowj];
+                                }
+                            }
+                            board[i][j].location.x = i;
+                            board[i][j].location.y = j;
+                            return false;
+                        }
+                        for (int rowi = 0; rowi < 8; rowi++){
+                            for (int rowj = 0; rowj < 8; rowj++){
+                                board[rowi][rowj] = backup[rowi][rowj];
+                            }
+                        }
+                        board[i][j].location.x = i;
+                        board[i][j].location.y = j;
+                    }
+                }
+            }
+        }
+        for (int i = 0; i < 8; i++){
+            for (int j = 0; j < 8; j++){
+                if (board[i][j] != null && board[i][j] instanceof King && board[i][j].owner.equals(player)){
+                    board[i][j].updateThreateningLocations();
+                    if (!board[i][j].threateningLocations.isEmpty()){                     
+                        return false;
+                    }
+                    break;
+                }
+            }
+        }
+                              
+        System.out.println("INCHECKMATE");     
+        return true;
+    }
+//        updateAllThreateningLocations();
+//        Piece[][] backup =  new Piece[8][8];
+//        for (int i = 0; i < 8; i++){
+//            for (int j = 0; j < 8; j++){
+//                backup[i][j] = board[i][j];
+//            }
+//        }
+//        for (int finalI = 0; finalI < 8; finalI++){
+//            for (int finalJ = 0; finalJ < 8; finalJ++){
+//                if (board[finalI][finalJ] != null){   
+//                if (!(board[finalI][finalJ] instanceof King)){
+//                                         
+//                        System.out.println("HEREEEEEE");
+//                        
+//                        int originalX = finalI;
+//                        int originalY = finalJ;                                
+//                        ArrayList<Point> curThreatening = new ArrayList<>();
+//                        //deep copy
+//                        for (int i = 0; i < board[finalI][finalJ].threateningLocations.size(); i ++){
+//                            curThreatening.add(new Point(board[finalI][finalJ].threateningLocations.get(i).x, board[finalI][finalJ].threateningLocations.get(i).y));
+//                        }
+//                        System.out.println(board[finalI][finalJ].threateningLocations.size()-1);
+//                        System.out.println(board[finalI][finalJ].threateningLocations.size());
+//                        System.out.println(board[finalI][finalJ].threateningLocations.toString());
+//                        for (int loc = board[finalI][finalJ].threateningLocations.size()-1; loc >= 0; loc --){
+//                            System.out.println(board[finalI][finalJ].threateningLocations.get(loc).toString());
+//                            placePieceAt(board[finalI][finalJ], board[finalI][finalJ].threateningLocations.get(loc));
+//                            if (inCheck(curPlayer)){
+//                                System.out.println("REM");
+//                                curThreatening.remove(loc);
+//                            }
+//                            for (int rowi = 0; rowi < 8; rowi++){
+//                                for (int rowj = 0; rowj < 8; rowj++){
+//                                    board[rowi][rowj] = backup[rowi][rowj];
+//                                }
+//                            }
+//                            board[finalI][finalJ].location.x = originalX;
+//                            board[finalI][finalJ].location.y = originalY;
+//                            board[finalI][finalJ].updateThreateningLocations();
+//                            System.out.println(board[finalI][finalJ].threateningLocations.toString());
+//                        }
+//
+//                        System.out.println(board[finalI][finalJ].threateningLocations.toString());
+//                        System.out.println("------------------------------FINAL THREAT--------------------------");
+//                        if (board[finalI][finalJ] instanceof Pawn){
+//                            ArrayList<Point> curMovable = new ArrayList<>();
+//                            //deep copy
+//                            for (int i = 0; i < board[finalI][finalJ].movableLocations.size(); i ++){
+//                                curMovable.add(new Point(board[finalI][finalJ].movableLocations.get(i).x, board[finalI][finalJ].movableLocations.get(i).y));
+//                            }
+//                            System.out.println(board[finalI][finalJ].movableLocations.size()-1);
+//                            System.out.println(board[finalI][finalJ].movableLocations.size());
+//                            System.out.println(board[finalI][finalJ].movableLocations.toString());
+//                            for (int loc = board[finalI][finalJ].movableLocations.size()-1; loc >= 0; loc --){
+//                                System.out.println(board[finalI][finalJ].movableLocations.get(loc).toString());
+//                                placePieceAt(board[finalI][finalJ], board[finalI][finalJ].movableLocations.get(loc));
+//            //                                                System.out.println(board[finalI][finalJ].movableLocations.get(loc).toString());
+//            //                                                if (board[board[finalI][finalJ].movableLocations.get(loc).x][board[finalI][finalJ].movableLocations.get(loc).y] != null){
+//            //                                                    System.out.println(board[board[finalI][finalJ].movableLocations.get(loc).x][board[finalI][finalJ].movableLocations.get(loc).y]);
+//            //                                                }
+//            //                                                if(board[finalI][finalJ] != null){
+//            //                                                    System.out.println("TYPE");
+//            //                                                    System.out.println(board[finalI][finalJ]);
+//            //                                                }
+//                                if (inCheck(curPlayer)){
+//                                    System.out.println("REM");
+//                                    curMovable.remove(loc);
+//                                }
+//                                for (int rowi = 0; rowi < 8; rowi++){
+//                                    for (int rowj = 0; rowj < 8; rowj++){
+//                                        board[rowi][rowj] = backup[rowi][rowj];
+//                                    }
+//                                }
+//                                board[finalI][finalJ].location.x = originalX;
+//                                board[finalI][finalJ].location.y = originalY;
+//                                board[finalI][finalJ].updateMovableLocations();
+//                                System.out.println(board[finalI][finalJ].movableLocations.toString());
+//                            }
+//                            board[finalI][finalJ].movableLocations = curMovable;
+//                        }
+//                        board[finalI][finalJ].threateningLocations = curThreatening;
+//                        System.out.println(board[finalI][finalJ].threateningLocations.toString());
+//                        System.out.println("THREAT HERE");
+//                    }
+//                }
+//            }
+//        }
+//        for (int i = 0; i < 8; i++){
+//            for (int j = 0; j < 8; j++){
+//                if (board[i][j].owner.equals(player) && (board[i][j].threateningLocations.size() != 0 
+//                        || board[i][j].movableLocations.size() != 0)){
+//                    System.out.println("ELOELLCODOSOODSO");
+//                    return false;
+//                }
+//            }
+//        }
+//        return true;
+//    }
     public boolean inCheck(String player){
         Point kLocation = null;
         char id;
@@ -372,8 +521,18 @@ public class ChessBoard {
                                     curPlayer = "player1";                                
                                     description.setText(whiteLabel);
                                 }
+                                System.out.println("BEFORE1");
+                                boardToText();
                                 
                                 curCheck = inCheck(curPlayer);
+                                System.out.println("BEFORE2");
+                                
+                                boardToText();
+                                if (curCheck){
+                                    inCheckMate(curPlayer);
+                                }
+                                System.out.println("AFTER");
+                                boardToText();
                                 curMove = null;
                             }
 //                        if (curMove != null){
@@ -634,6 +793,7 @@ public class ChessBoard {
             }
             output += "\n";
         }
+        System.out.println(output);
         return output;
     }
 }

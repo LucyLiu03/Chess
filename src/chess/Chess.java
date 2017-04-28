@@ -28,7 +28,7 @@ public class Chess {
         System.out.println("---------------");
         
         cgame.getChessBoard().createGraphics(8, 8);
-        cgame.getChessBoard().placePieceAt(cgame.getChessBoard().getPieceAt(new Point (1, 2)), new Point(6, 1));
+//        cgame.getChessBoard().placePieceAt(cgame.getChessBoard().getPieceAt(new Point (1, 2)), new Point(6, 1));
         cgame.getChessBoard().updateGraphics();
         cgame.getChessBoard().getPieceAt(new Point (0, 6)).updateThreateningLocations();
         cgame.getChessBoard().getPieceAt(new Point (0, 6)).printThreateningLocations();
