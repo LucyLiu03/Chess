@@ -359,8 +359,9 @@ public class ChessBoard {
                                 }
 //                                System.out.println("CUR" + curMove.toString());
                                 updateGraphics();
-                                if (board[curMove.x][curMove.y] instanceof Pawn && ((Pawn)board[curMove.x][curMove.y]).firstMove){
-                                    ((Pawn)board[curMove.x][curMove.y]).firstMove = false;
+                                if (board[finalI][finalJ] instanceof Pawn && ((Pawn)board[finalI][finalJ]).firstMove){
+                                    System.out.println("INININasdasdas");
+                                    ((Pawn)board[finalI][finalJ]).firstMove = false;
                                 }
                                 
                                 if (curPlayer.equals("player1")){
