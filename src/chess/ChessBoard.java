@@ -96,7 +96,7 @@ public class ChessBoard {
     public Piece getPieceAt(Point location) {
         return board[location.x][location.y];
     }
-    
+    //REMOVE
     public void initializeImages() throws IOException{
          String[] IMAGE_FILES = {
           "Rook.png", "Knight.png", "Bishop.png", "Queen.png", "King.png", "Bishop.png"
@@ -104,7 +104,7 @@ public class ChessBoard {
          
          
          for (int k = 0; k < IMAGE_FILES.length; k ++){
-            images [k] = ImageIO.read(new File(String.format(IMAGE_FILES[k])));      
+            images [k] = ImageIO.read(new File(IMAGE_FILES[k]));      
             
          }
          
@@ -311,7 +311,7 @@ public class ChessBoard {
         final JLabel curImageLabel = new JLabel();
         Image logoImage = null;
         try {
-            logoImage = ImageIO.read(new File(String.format("logo.png")));
+            logoImage = ImageIO.read(new File("logo.png"));
         } catch (IOException ex) {
             Logger.getLogger(ChessBoard.class.getName()).log(Level.SEVERE, null, ex);
         }
@@ -701,14 +701,14 @@ public class ChessBoard {
 
                             if (getPieceAt(new Point(finalI, finalJ)).owner.equals("player1")){                    
                                 try {
-                                    curImg = ImageIO.read(new File(String.format(getPieceAt(new Point(finalI, finalJ)).id+".png")));
+                                    curImg = ImageIO.read(new File(getPieceAt(new Point(finalI, finalJ)).id+".png"));
                                 } catch (IOException ex) {
                                     Logger.getLogger(ChessBoard.class.getName()).log(Level.SEVERE, null, ex);
                                 }
                             }
                             else{
                                 try {
-                                    curImg = ImageIO.read(new File(String.format(getPieceAt(new Point(finalI, finalJ)).id+"-black.png")));
+                                    curImg = ImageIO.read(new File(getPieceAt(new Point(finalI, finalJ)).id+"-black.png"));
                                 } catch (IOException ex) {
                                     Logger.getLogger(ChessBoard.class.getName()).log(Level.SEVERE, null, ex);
                                 }
@@ -759,14 +759,14 @@ public class ChessBoard {
                     
                     if (this.getPieceAt(new Point(i, j)).owner.equals("player1")){                    
                         try {
-                            img = ImageIO.read(new File(String.format(this.getPieceAt(new Point(i, j)).id+".png")));
+                            img = ImageIO.read(new File(this.getPieceAt(new Point(i, j)).id+".png"));
                         } catch (IOException ex) {
                             Logger.getLogger(ChessBoard.class.getName()).log(Level.SEVERE, null, ex);
                         }
                     }
                     else{
                         try {
-                            img = ImageIO.read(new File(String.format(this.getPieceAt(new Point(i, j)).id+"-black.png")));
+                            img = ImageIO.read(new File(this.getPieceAt(new Point(i, j)).id+"-black.png"));
                         } catch (IOException ex) {
                             Logger.getLogger(ChessBoard.class.getName()).log(Level.SEVERE, null, ex);
                         }
