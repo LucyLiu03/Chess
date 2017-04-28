@@ -39,20 +39,20 @@ public class King extends Piece{
            for( int curj = -1; curj<=1; curj++){
                System.out.println("WADADADADADAAD");
                if (!( curi == 0 && curj == 0)){
-                   System.out.println("----");
+//                   System.out.println("----");
                    Point proposedLocation = new Point(originalX + curi, originalY + curj);
                    System.out.println(proposedLocation.toString());
-                   System.out.println("----");
+//                   System.out.println("----");
                    if (ChessBoard.locationInBounds(proposedLocation) && !game.getChessBoard().getPieceOwner(proposedLocation).equals(owner)){
                        
                        game.getChessBoard().placePieceAt(this, proposedLocation);
                        game.getChessBoard().updateAllThreateningLocations();
-                       System.out.println("DONE");
+//                       System.out.println("DONE");
                        boolean add = true;
                        for (int rowi = 0; rowi < 8; rowi++) {
                             for (int coli = 0; coli < 8; coli++) {
                                 if (game.getChessBoard().getPieceAt(new Point(rowi, coli)) != null){
-                                    System.out.println("WERREFSD");
+//                                    System.out.println("WERREFSD");
                                     if (game.getChessBoard().getPieceAt(new Point(rowi, coli)).threateningLocations.contains(proposedLocation)){
                                         add = false;
                                         System.out.println("WE BE BALLIN");

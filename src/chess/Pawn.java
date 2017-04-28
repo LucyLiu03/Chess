@@ -33,7 +33,7 @@ public class Pawn extends Piece{
             oneOffset = 1;
         }
         movableLocations.clear();
-        System.out.println(oneOffset + "ooo");
+//        System.out.println(oneOffset + "ooo");
         if (oneOffset != 0 && !game.getChessBoard().isPieceAt(location.x+oneOffset, location.y) && ChessBoard.locationInBounds(new Point(location.x+oneOffset, location.y))){
             movableLocations.add(new Point(location.x+oneOffset, location.y));
             if (firstMove){
