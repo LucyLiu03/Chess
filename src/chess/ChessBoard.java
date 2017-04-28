@@ -25,6 +25,7 @@ import javax.swing.JButton;
 import javax.swing.JDialog;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
+import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JRadioButton;
 
@@ -125,8 +126,11 @@ public class ChessBoard {
             for (int j = 0; j < 8; j++){
                 if (board[i][j] != null && board[i][j].owner == player){
                     for (int loc = 0; loc < board[i][j].threateningLocations.size(); loc++){
+                        boardToText();
                         System.out.println(board[i][j].threateningLocations.size());
                         System.out.println(board[i][j].threateningLocations.get(loc));
+                        System.out.println(i + " " + j);
+                        System.out.println(board[i][j]);
                         placePieceAt(board[i][j], board[i][j].threateningLocations.get(loc));
                         if (!inCheck(curPlayer)){
                             System.out.println("NOT IN CHECK");
@@ -136,6 +140,7 @@ public class ChessBoard {
                                 board[rowi][rowj] = backup[rowi][rowj];
                                 }
                             }
+                            updateAllThreateningLocations();
                             board[i][j].location.x = i;
                             board[i][j].location.y = j;
                             return false;
@@ -145,6 +150,7 @@ public class ChessBoard {
                                 board[rowi][rowj] = backup[rowi][rowj];
                             }
                         }
+                        updateAllThreateningLocations();
                         board[i][j].location.x = i;
                         board[i][j].location.y = j;
                     }
@@ -155,7 +161,8 @@ public class ChessBoard {
             for (int j = 0; j < 8; j++){
                 if (board[i][j] != null && board[i][j] instanceof King && board[i][j].owner.equals(player)){
                     board[i][j].updateThreateningLocations();
-                    if (!board[i][j].threateningLocations.isEmpty()){                     
+                    if (!board[i][j].threateningLocations.isEmpty()){        
+                        System.out.println("RETURNED FALSE");
                         return false;
                     }
                     break;
@@ -529,7 +536,15 @@ public class ChessBoard {
                                 
                                 boardToText();
                                 if (curCheck){
-                                    inCheckMate(curPlayer);
+                                    if (inCheckMate(curPlayer)){
+                                        System.out.println("hereee");
+                                        JOptionPane.showMessageDialog(graphicsFrame, (curPlayer.equals("player1") ? "White":"Black") + " is in checkmate. " + (curPlayer.equals("player1") ? "Black":"White") + " has won the game!");
+                                        graphicsFrame.dispose();
+                                        System.exit(0);
+                                    }
+                                    else{
+                                        JOptionPane.showMessageDialog(graphicsFrame, (curPlayer.equals("player1") ? "White":"Black") + " is in check. Please choose a valid move (highlighted in green/red).");
+                                    }
                                 }
                                 System.out.println("AFTER");
                                 boardToText();

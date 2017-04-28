@@ -70,7 +70,7 @@ public class Pawn extends Piece{
                 if (!game.getChessBoard().getPieceOwner(new Point(location.x + oneOffset, location.y + 1)).equals(owner)){
                     threateningLocations.add(new Point(location.x + oneOffset, location.y + 1));
                     //TODO FIX END PAWN ACTION
-                    System.out.println("sadasdas2d");
+//                    System.out.println("sadasdas2d");
                 }
             }
             updateMovableLocations();
