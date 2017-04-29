@@ -86,10 +86,14 @@ public class King extends Piece{
                        }
                        //Prevent Kings from threatening each other
                        //Adding other king to update threatening would cause infinite recursion
-                       if (add && distance(new Point(originalX + curi, originalY + curj), other) >= 2){
-                           threateningLocations.add(new Point(originalX + curi, originalY + curj));
-                           System.out.println(proposedLocation.toString());
-                           System.out.println("INININININ");
+                       try{
+                           if (add && distance(new Point(originalX + curi, originalY + curj), other) >= 2){
+                                threateningLocations.add(new Point(originalX + curi, originalY + curj));
+                                System.out.println(proposedLocation.toString());
+                                System.out.println("INININININ");
+                           }
+                       }
+                       catch (NullPointerException e){                           
                        }
                        for (int rowi = 0; rowi < 8; rowi++){
                             for (int rowj = 0; rowj < 8; rowj++){
