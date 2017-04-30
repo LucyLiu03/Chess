@@ -22,7 +22,7 @@ public abstract class Piece {
     
     public Piece(String owner, Point initialLocation, ChessGame cGame) {
         this.owner = owner;
-        Point location = initialLocation;
+        location = initialLocation;
         threateningLocations = new ArrayList<>();
         movableLocations = new ArrayList<>();
         this.game = cGame;
@@ -101,14 +101,14 @@ public abstract class Piece {
     
     public void printThreateningLocations(){
         for (int i = 0; i < threateningLocations.size(); i++){
-            System.out.println(threateningLocations.get(i).toString());
+            
         }
-        System.out.println("awasdasdasdwasd");
+        
     }
     
 //    public void printMovableLocations(){
 //        for (int i = 0; i < movableLocations.size(); i++){
-//            System.out.println(movableLocations.get(i).toString());
+//            
 //        }
 //    }
     
@@ -184,7 +184,7 @@ public abstract class Piece {
         }
       
         else{
-            System.out.println("***Invalid direction given***");
+            
         }
         
         return diagonalLocations;

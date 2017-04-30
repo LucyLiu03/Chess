@@ -11,15 +11,13 @@ import java.awt.Point;
  */
 public class ChessGame {
     private ChessBoard chessBoard;
-    public Point player1K;
-    public Point player2K;
 
     
     public ChessGame() {
         chessBoard = new ChessBoard(this);
         setupTeam(0, "player2");
         setupTeam(7, "player1");
-        System.out.println("DONEONDOEMN");
+        
         chessBoard.createGraphics(8, 8);
         chessBoard.graphicsFrame.pack();
         chessBoard.graphicsFrame.setVisible(true);
@@ -50,12 +48,10 @@ public class ChessGame {
 
         //King
         if (player.equalsIgnoreCase("player1")) {
-            Piece k = new King(player, new Point(homeRow, colIncrement+1), this);            
-            player1K = new Point(homeRow, colIncrement+1);
+            Piece k = new King(player, new Point(homeRow, colIncrement+1), this);
             Piece q = new Queen(player, new Point(homeRow, 6-colIncrement), this);
         } else {
             Piece k = new King(player, new Point(homeRow, colIncrement+1), this);
-            player2K = new Point(homeRow, colIncrement+1);
             Piece q = new Queen(player, new Point(homeRow, 6-colIncrement), this);
         }       
         
@@ -65,7 +61,7 @@ public class ChessGame {
             Piece p = new Pawn(player, new Point(homeRow + oneOffsetPawn, i), this);
         }
         this.getChessBoard().toString();
-        System.out.println("hereew");
+        
     }
     
 

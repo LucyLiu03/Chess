@@ -33,7 +33,7 @@ public class Pawn extends Piece{
             oneOffset = 1;
         }
         movableLocations.clear();
-//        System.out.println(oneOffset + "ooo");
+//        
         if (oneOffset != 0 && !game.getChessBoard().isPieceAt(location.x+oneOffset, location.y) && ChessBoard.locationInBounds(new Point(location.x+oneOffset, location.y))){
             movableLocations.add(new Point(location.x+oneOffset, location.y));
             if (firstMove){
@@ -70,19 +70,10 @@ public class Pawn extends Piece{
                 if (!game.getChessBoard().getPieceOwner(new Point(location.x + oneOffset, location.y + 1)).equals(owner)){
                     threateningLocations.add(new Point(location.x + oneOffset, location.y + 1));
                     //TODO FIX END PAWN ACTION
-//                    System.out.println("sadasdas2d");
+//                    
                 }
             }
             updateMovableLocations();
         }
-//        if (oneOffset != 0 && !game.getChessBoard().isPieceAt(location.x+oneOffset, location.y) && ChessBoard.locationInBounds(new Point(location.x+oneOffset, location.y))){
-//            threateningLocations.add(new Point(location.x+oneOffset, location.y));
-//            if (firstMove){
-//                Point proposedLocation = new Point(location.x + oneOffset*2, location.y);
-//                if (ChessBoard.locationInBounds(proposedLocation) && !game.getChessBoard().isPieceAt(location.x+oneOffset*2, location.y)){
-//                    threateningLocations.add(proposedLocation);
-//                }
-//            }
-//        }
     }
 }

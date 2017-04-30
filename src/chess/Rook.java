@@ -27,9 +27,5 @@ public class Rook extends Piece{
         
         threateningLocations.addAll(getHorizontalLocations(1));
         threateningLocations.addAll(getHorizontalLocations(-1));
-//        System.out.println(getVerticalLocations((id == 'R') ? 1:-1, location).isEmpty());
-//        System.out.println("asdasdsad");
-//        System.out.println(super.getHorizontalLocations((id == 'R') ? 1:-1, location).isEmpty());
-//        System.out.println("asdasdsad");        
     }
 }
