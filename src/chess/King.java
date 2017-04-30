@@ -31,17 +31,17 @@ public class King extends Piece{
                backup[i][j] = game.getChessBoard().getPieceAt(new Point(i, j));
            }
        }
-       System.out.println("ASDAS" + location.toString());
+//       System.out.println("ASDAS" + location.toString());
        int originalX = location.x;
        int originalY = location.y;
        //MAKE BETTER - ONLY BACKUP KING CUR AND KING NEW
        for (int curi = -1; curi<=1; curi++){
            for( int curj = -1; curj<=1; curj++){
-               System.out.println("WADADADADADAAD");
+//               System.out.println("WADADADADADAAD");
                if (!( curi == 0 && curj == 0)){
 //                   System.out.println("----");
                    Point proposedLocation = new Point(originalX + curi, originalY + curj);
-                   System.out.println(proposedLocation.toString());
+//                   System.out.println(proposedLocation.toString());
 //                   System.out.println("----");
                    if (ChessBoard.locationInBounds(proposedLocation) && !game.getChessBoard().getPieceOwner(proposedLocation).equals(owner)){
                        
@@ -55,7 +55,7 @@ public class King extends Piece{
 //                                    System.out.println("WERREFSD");
                                     if (game.getChessBoard().getPieceAt(new Point(rowi, coli)).threateningLocations.contains(proposedLocation)){
                                         add = false;
-                                        System.out.println("WE BE BALLIN");
+//                                        System.out.println("WE BE BALLIN");
                                     }
                                 }
                             }
@@ -89,8 +89,8 @@ public class King extends Piece{
                        try{
                            if (add && distance(new Point(originalX + curi, originalY + curj), other) >= 2){
                                 threateningLocations.add(new Point(originalX + curi, originalY + curj));
-                                System.out.println(proposedLocation.toString());
-                                System.out.println("INININININ");
+//                                System.out.println(proposedLocation.toString());
+//                                System.out.println("INININININ");
                            }
                        }
                        catch (NullPointerException e){                           
@@ -107,7 +107,7 @@ public class King extends Piece{
                        }   
                        this.location.x = originalX;
                        this.location.y = originalY;
-                       System.out.println("sd");
+//                       System.out.println("sd");
 //                       game.getChessBoard().board = backup;
                    }
                }              

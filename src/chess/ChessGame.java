@@ -20,6 +20,9 @@ public class ChessGame {
         setupTeam(0, "player2");
         setupTeam(7, "player1");
         System.out.println("DONEONDOEMN");
+        chessBoard.createGraphics(8, 8);
+        chessBoard.graphicsFrame.pack();
+        chessBoard.graphicsFrame.setVisible(true);
     }
     
     public ChessBoard getChessBoard() {

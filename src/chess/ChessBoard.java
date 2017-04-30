@@ -18,16 +18,7 @@ import java.util.ArrayList;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.imageio.ImageIO;
-import javax.swing.BoxLayout;
-import javax.swing.ButtonGroup;
-import javax.swing.ImageIcon;
-import javax.swing.JButton;
-import javax.swing.JDialog;
-import javax.swing.JFrame;
-import javax.swing.JLabel;
-import javax.swing.JOptionPane;
-import javax.swing.JPanel;
-import javax.swing.JRadioButton;
+import javax.swing.*;
 
 /**
  *
@@ -55,6 +46,13 @@ public class ChessBoard {
         curGame = game;
         inPromotion = false;
         curCheck = false;
+        
+        graphicsFrame = new JFrame();
+//        resetBackgrounds();
+//        createGraphics(8, 8);
+        
+        
+        
     }
 
     public boolean isPieceAt(int row, int col) {
@@ -124,7 +122,7 @@ public class ChessBoard {
         updateAllThreateningLocations();
         for (int i = 0; i < 8; i++){
             for (int j = 0; j < 8; j++){
-                if (board[i][j] != null && board[i][j].owner == player){
+                if (board[i][j] != null && board[i][j].owner.equals(player) && !(board[i][j] instanceof King)){
                     for (int loc = 0; loc < board[i][j].threateningLocations.size(); loc++){
                         boardToText();
                         System.out.println(board[i][j].threateningLocations.size());
@@ -132,27 +130,55 @@ public class ChessBoard {
                         System.out.println(i + " " + j);
                         System.out.println(board[i][j]);
                         placePieceAt(board[i][j], board[i][j].threateningLocations.get(loc));
+                        
+                        boardToText();
                         if (!inCheck(curPlayer)){
-                            System.out.println("NOT IN CHECK");
+                            System.out.println("NOT IN MATE");
                             
                             for (int rowi = 0; rowi < 8; rowi++){
-                            for (int rowj = 0; rowj < 8; rowj++){
-                                board[rowi][rowj] = backup[rowi][rowj];
-                                }
+                                System.arraycopy(backup[rowi], 0, board[rowi], 0, 8);
                             }
-                            updateAllThreateningLocations();
                             board[i][j].location.x = i;
                             board[i][j].location.y = j;
+                            
+                            updateAllThreateningLocations();
                             return false;
                         }
                         for (int rowi = 0; rowi < 8; rowi++){
-                            for (int rowj = 0; rowj < 8; rowj++){
-                                board[rowi][rowj] = backup[rowi][rowj];
-                            }
+                            System.arraycopy(backup[rowi], 0, board[rowi], 0, 8);
                         }
-                        updateAllThreateningLocations();
                         board[i][j].location.x = i;
                         board[i][j].location.y = j;
+                        
+                        updateAllThreateningLocations();
+                    }
+                    //Checks if pawn can move forward to stop the check
+                    if (board[i][j] instanceof Pawn){
+                        for (int loc = 0; loc < board[i][j].movableLocations.size(); loc++){
+                            boardToText();
+                            placePieceAt(board[i][j], board[i][j].movableLocations.get(loc));
+
+                            boardToText();
+                            if (!inCheck(curPlayer)){
+                                System.out.println("EYYYYDFDSFDSDFS");
+
+                                for (int rowi = 0; rowi < 8; rowi++){
+                                    System.arraycopy(backup[rowi], 0, board[rowi], 0, 8);
+                                }
+                                board[i][j].location.x = i;
+                                board[i][j].location.y = j;
+
+                                updateAllThreateningLocations();
+                                return false;
+                            }
+                            for (int rowi = 0; rowi < 8; rowi++){
+                                System.arraycopy(backup[rowi], 0, board[rowi], 0, 8);
+                            }
+                            board[i][j].location.x = i;
+                            board[i][j].location.y = j;
+
+                            updateAllThreateningLocations();
+                        }
                     }
                 }
             }
@@ -274,7 +300,7 @@ public class ChessBoard {
     public boolean inCheck(String player){
         Point kLocation = null;
         char id;
-        if (player == "player1"){
+        if ("player1".equals(player)){
             id = 'K';
         }
         else {
@@ -300,8 +326,7 @@ public class ChessBoard {
         return false;
     }
     public void createGraphics(int row, int col){
-        graphicsFrame = new JFrame();
-        
+        graphicsFrame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);        
         graphicsFrame.setTitle("Chess");
         graphicsFrame.setSize(800, 800);
         graphicsFrame.setBackground(Color.black);
@@ -312,7 +337,8 @@ public class ChessBoard {
         final JLabel curImageLabel = new JLabel();
         Image logoImage = null;
         try {
-            logoImage = ImageIO.read(new File("logo.png"));
+            logoImage = ImageIO.read(getClass().getResource("/images/logo.PNG"));
+//            logoImage = ImageIO.read(new File("logo.png"));
         } catch (IOException ex) {
             Logger.getLogger(ChessBoard.class.getName()).log(Level.SEVERE, null, ex);
         }
@@ -326,7 +352,6 @@ public class ChessBoard {
         final String whiteLabel = "<html><div style='text-align: center;'><font color='yellow'>Current Player: </font><br><font color='white'>White</font></div></html>";
         final JLabel description = new JLabel(whiteLabel);
         description.setFont(new Font("TimesRoman", Font.BOLD, 26));
-        final ImageIcon curPiece = new ImageIcon();
 //        description.setAlignmentX(50);
         sidebar.setPreferredSize(new Dimension (200, 800));
         sidebar.add(description, BorderLayout.CENTER);
@@ -404,7 +429,7 @@ public class ChessBoard {
                                         @Override
                                         public void actionPerformed(ActionEvent e) {
                                             String prevPlayer;
-                                            if (curPlayer == "player1"){
+                                            if ("player1".equals(curPlayer)){
                                                 prevPlayer = "player2";
                                             }
                                             else{
@@ -414,6 +439,18 @@ public class ChessBoard {
                                             inPromotion = false;
                                             updateGraphics();
                                             promotionFrame.dispose();
+                                            curCheck = inCheck(curPlayer);
+                                            if (curCheck){
+                                                if (inCheckMate(curPlayer)){
+                                                    System.out.println("hereee");
+                                                    JOptionPane.showMessageDialog(graphicsFrame, (curPlayer.equals("player1") ? "White":"Black") + " is in checkmate. " + (curPlayer.equals("player1") ? "Black":"White") + " has won the game!");
+                                                    graphicsFrame.dispose();
+                                                    System.exit(0);
+                                                }
+                                                else{
+                                                    JOptionPane.showMessageDialog(graphicsFrame, (curPlayer.equals("player1") ? "White":"Black") + " is in check. Please choose a valid move (highlighted in green/red).");
+                                                }
+                                            }
                                         }
                                         
                                     });
@@ -423,7 +460,7 @@ public class ChessBoard {
                                         @Override
                                         public void actionPerformed(ActionEvent e) {
                                             String prevPlayer;
-                                            if (curPlayer == "player1"){
+                                            if ("player1".equals(curPlayer)){
                                                 prevPlayer = "player2";
                                             }
                                             else{
@@ -433,6 +470,18 @@ public class ChessBoard {
                                             inPromotion = false;
                                             updateGraphics();
                                             promotionFrame.dispose();
+                                            curCheck = inCheck(curPlayer);
+                                            if (curCheck){
+                                                if (inCheckMate(curPlayer)){
+                                                    System.out.println("hereee");
+                                                    JOptionPane.showMessageDialog(graphicsFrame, (curPlayer.equals("player1") ? "White":"Black") + " is in checkmate. " + (curPlayer.equals("player1") ? "Black":"White") + " has won the game!");
+                                                    graphicsFrame.dispose();
+                                                    System.exit(0);
+                                                }
+                                                else{
+                                                    JOptionPane.showMessageDialog(graphicsFrame, (curPlayer.equals("player1") ? "White":"Black") + " is in check. Please choose a valid move (highlighted in green/red).");
+                                                }
+                                            }
                                         }
                                         
                                     });
@@ -442,7 +491,7 @@ public class ChessBoard {
                                         @Override
                                         public void actionPerformed(ActionEvent e) {
                                             String prevPlayer;
-                                            if (curPlayer == "player1"){
+                                            if ("player1".equals(curPlayer)){
                                                 prevPlayer = "player2";
                                             }
                                             else{
@@ -452,6 +501,18 @@ public class ChessBoard {
                                             inPromotion = false;
                                             updateGraphics();
                                             promotionFrame.dispose();
+                                            curCheck = inCheck(curPlayer);
+                                            if (curCheck){
+                                                if (inCheckMate(curPlayer)){
+                                                    System.out.println("hereee");
+                                                    JOptionPane.showMessageDialog(graphicsFrame, (curPlayer.equals("player1") ? "White":"Black") + " is in checkmate. " + (curPlayer.equals("player1") ? "Black":"White") + " has won the game!");
+                                                    graphicsFrame.dispose();
+                                                    System.exit(0);
+                                                }
+                                                else{
+                                                    JOptionPane.showMessageDialog(graphicsFrame, (curPlayer.equals("player1") ? "White":"Black") + " is in check. Please choose a valid move (highlighted in green/red).");
+                                                }
+                                            }
                                         }
                                         
                                     });
@@ -461,7 +522,7 @@ public class ChessBoard {
                                         @Override
                                         public void actionPerformed(ActionEvent e) {
                                             String prevPlayer;
-                                            if (curPlayer == "player1"){
+                                            if ("player1".equals(curPlayer)){
                                                 prevPlayer = "player2";
                                             }
                                             else{
@@ -471,12 +532,25 @@ public class ChessBoard {
                                             inPromotion = false;
                                             updateGraphics();
                                             promotionFrame.dispose();
+                                            curCheck = inCheck(curPlayer);
+                                            if (curCheck){
+                                                if (inCheckMate(curPlayer)){
+                                                    System.out.println("hereee");
+                                                    JOptionPane.showMessageDialog(graphicsFrame, (curPlayer.equals("player1") ? "White":"Black") + " is in checkmate. " + (curPlayer.equals("player1") ? "Black":"White") + " has won the game!");
+                                                    graphicsFrame.dispose();
+                                                    System.exit(0);
+                                                }
+                                                else{
+                                                    JOptionPane.showMessageDialog(graphicsFrame, (curPlayer.equals("player1") ? "White":"Black") + " is in check. Please choose a valid move (highlighted in green/red).");
+                                                }
+                                            }
+                                            
                                         }
                                         
                                     });
                                     promotionPanel.setPreferredSize(new Dimension(400, 100));
                                     promotionFrame.add(promotionPanel);
-                                    promotionPanel.setVisible(true);
+                                    promotionFrame.setDefaultCloseOperation(JFrame.DO_NOTHING_ON_CLOSE);
                                     promotionFrame.pack();
                                     promotionFrame.setVisible(true);
 //                                    updateGraphics();
@@ -595,9 +669,7 @@ public class ChessBoard {
                                         System.out.println("HEREEEEEE");
                                         Piece[][] backup =  new Piece[8][8];
                                         for (int i = 0; i < 8; i++){
-                                            for (int j = 0; j < 8; j++){
-                                                backup[i][j] = board[i][j];
-                                            }
+                                            System.arraycopy(board[i], 0, backup[i], 0, 8);
                                         }
                                         int originalX = board[finalI][finalJ].location.x;
                                         int originalY = board[finalI][finalJ].location.y;                                
@@ -617,9 +689,7 @@ public class ChessBoard {
                                                 curThreatening.remove(loc);
                                             }
                                             for (int rowi = 0; rowi < 8; rowi++){
-                                                for (int rowj = 0; rowj < 8; rowj++){
-                                                    board[rowi][rowj] = backup[rowi][rowj];
-                                                }
+                                                System.arraycopy(backup[rowi], 0, board[rowi], 0, 8);
                                             }
                                             board[finalI][finalJ].location.x = originalX;
                                             board[finalI][finalJ].location.y = originalY;
@@ -654,9 +724,7 @@ public class ChessBoard {
                                                     curMovable.remove(loc);
                                                 }
                                                 for (int rowi = 0; rowi < 8; rowi++){
-                                                    for (int rowj = 0; rowj < 8; rowj++){
-                                                        board[rowi][rowj] = backup[rowi][rowj];
-                                                    }
+                                                    System.arraycopy(backup[rowi], 0, board[rowi], 0, 8);
                                                 }
                                                 board[finalI][finalJ].location.x = originalX;
                                                 board[finalI][finalJ].location.y = originalY;
@@ -676,7 +744,8 @@ public class ChessBoard {
                                 buttons[finalI][finalJ].setBackground(Color.CYAN);
                                 System.out.println(board[finalI][finalJ].threateningLocations);
                                 System.out.println(board[finalI][finalJ].movableLocations);
-                                if (board[finalI][finalJ].threateningLocations.size() != 0){
+                                boolean setNew = false;
+                                if (!board[finalI][finalJ].threateningLocations.isEmpty()){
                                     for (int loc = 0; loc < board[finalI][finalJ].threateningLocations.size(); loc++){
                                         if (isPieceAt(board[finalI][finalJ].threateningLocations.get(loc).x, board[finalI][finalJ].threateningLocations.get(loc).y)){
                                             buttons[board[finalI][finalJ].threateningLocations.get(loc).x][board[finalI][finalJ].threateningLocations.get(loc).y].setBackground(Color.RED);
@@ -687,29 +756,35 @@ public class ChessBoard {
                                     }
 
                                     curMove = new Point(finalI, finalJ);
+                                    setNew = true;
                                 }
-                                if (board[finalI][finalJ].movableLocations.size() != 0){
+                                if (!board[finalI][finalJ].movableLocations.isEmpty()){
                                     for (int loc = 0; loc < board[finalI][finalJ].movableLocations.size(); loc++){
                                         buttons[board[finalI][finalJ].movableLocations.get(loc).x][board[finalI][finalJ].movableLocations.get(loc).y].setBackground(Color.GREEN);
                                     }
                                     curMove = new Point(finalI, finalJ);
+                                    setNew = true;
                                 }
+                                if (!setNew){
+                                    curMove = null;
+                                }
+                                
                             
                             
                         }
-                        if (board[finalI][finalJ] != null){
+                        if (board[finalI][finalJ] != null && getPieceAt(new Point(finalI, finalJ)).owner.equals(curPlayer)){
                             Image curImg = null;
 
                             if (getPieceAt(new Point(finalI, finalJ)).owner.equals("player1")){                    
                                 try {
-                                    curImg = ImageIO.read(new File(getPieceAt(new Point(finalI, finalJ)).id+".png"));
+                                    curImg = ImageIO.read(getClass().getResource("/images/" + getPieceAt(new Point(finalI, finalJ)).id + ".png"));
                                 } catch (IOException ex) {
                                     Logger.getLogger(ChessBoard.class.getName()).log(Level.SEVERE, null, ex);
                                 }
                             }
                             else{
                                 try {
-                                    curImg = ImageIO.read(new File(getPieceAt(new Point(finalI, finalJ)).id+"-black.png"));
+                                    curImg = ImageIO.read(getClass().getResource("/images/" + getPieceAt(new Point(finalI, finalJ)).id + "-black.png"));
                                 } catch (IOException ex) {
                                     Logger.getLogger(ChessBoard.class.getName()).log(Level.SEVERE, null, ex);
                                 }
@@ -718,6 +793,7 @@ public class ChessBoard {
     //                        curPlayerImage = curIcon;
                             curImageLabel.setIcon(curIcon);
                         }
+                        
 //                        System.out.println("Current state of board: ");
 //                        System.out.println(boardToText());
                     }
@@ -760,21 +836,21 @@ public class ChessBoard {
                     
                     if (this.getPieceAt(new Point(i, j)).owner.equals("player1")){                    
                         try {
-                            img = ImageIO.read(new File(this.getPieceAt(new Point(i, j)).id+".png"));
+                            img = ImageIO.read(getClass().getResource("/images/" + getPieceAt(new Point(i, j)).id + ".png"));
                         } catch (IOException ex) {
                             Logger.getLogger(ChessBoard.class.getName()).log(Level.SEVERE, null, ex);
                         }
                     }
                     else{
                         try {
-                            img = ImageIO.read(new File(this.getPieceAt(new Point(i, j)).id+"-black.png"));
+                            img = ImageIO.read(getClass().getResource("/images/" + getPieceAt(new Point(i, j)).id + "-black.png"));
                         } catch (IOException ex) {
                             Logger.getLogger(ChessBoard.class.getName()).log(Level.SEVERE, null, ex);
                         }
                     }
                     Image newimg = img.getScaledInstance(100, 100, java.awt.Image.SCALE_SMOOTH ) ;  
                     ImageIcon icon = new ImageIcon( newimg );
-                    buttons[i][j].setIcon(icon);             
+                    buttons[i][j].setIcon(icon);            
                 }
                 else{
                     buttons[i][j].setIcon(null);
