@@ -121,10 +121,9 @@ public class ChessBoard {
                 if (board[i][j] != null && board[i][j].owner.equals(player) && !(board[i][j] instanceof King)){
                     for (int loc = 0; loc < board[i][j].threateningLocations.size(); loc++){
                         placePieceAt(board[i][j], board[i][j].threateningLocations.get(loc));
-                        
-                        if (!inCheck(curPlayer)){
-                            
-                            
+                        //If the check can be stopped
+                        if (!inCheck(curPlayer)){                            
+                            //Restore from backup
                             for (int rowi = 0; rowi < rows; rowi++){
                                 System.arraycopy(backup[rowi], 0, board[rowi], 0, cols);
                             }
@@ -134,6 +133,7 @@ public class ChessBoard {
                             updateAllThreateningLocations();
                             return false;
                         }
+                        //Restore from backup
                         for (int rowi = 0; rowi < rows; rowi++){
                             System.arraycopy(backup[rowi], 0, board[rowi], 0, cols);
                         }
@@ -173,14 +173,15 @@ public class ChessBoard {
             for (int j = 0; j < cols; j++){
                 if (board[i][j] != null && board[i][j] instanceof King && board[i][j].owner.equals(player)){
                     board[i][j].updateThreateningLocations();
-                    if (!board[i][j].threateningLocations.isEmpty()){        
-                        
+                    //If the king can move then it is not checkmate
+                    if (!board[i][j].threateningLocations.isEmpty()){
                         return false;
                     }
                     break;
                 }
             }
         }
+        //If there is no valid move, then it is checkmate
         return true;
     }
     
@@ -472,108 +473,106 @@ public class ChessBoard {
                                 curMove = null;
                             }
                         }
-                        if (board[finalI][finalJ] != null && board[finalI][finalJ].owner.equals(curPlayer) && !inPromotion){                            
-                                board[finalI][finalJ].updateThreateningLocations();                                
+                        if (board[finalI][finalJ] != null && board[finalI][finalJ].owner.equals(curPlayer) && !inPromotion){                          
+                            board[finalI][finalJ].updateThreateningLocations();                                
 
-                                if (!(board[finalI][finalJ] instanceof King)){
-                                    if (curCheck){                        
-                                        //Backup array used to store a snapshot of the game
-                                        Piece[][] backup =  new Piece[rows][cols];
-                                        for (int i = 0; i < rows; i++){
-                                            System.arraycopy(board[i], 0, backup[i], 0, cols);
+                            if (!(board[finalI][finalJ] instanceof King)){
+                                if (curCheck){                        
+                                    //Backup array used to store a snapshot of the game
+                                    Piece[][] backup =  new Piece[rows][cols];
+                                    for (int i = 0; i < rows; i++){
+                                        System.arraycopy(board[i], 0, backup[i], 0, cols);
+                                    }
+                                    int originalX = board[finalI][finalJ].location.x;
+                                    int originalY = board[finalI][finalJ].location.y;                                
+                                    ArrayList<Point> curThreatening = new ArrayList<>();
+
+                                    //Create a copy of the x/y values to prevent passing by reference
+                                    for (int i = 0; i < board[finalI][finalJ].threateningLocations.size(); i ++){
+                                        curThreatening.add(new Point(board[finalI][finalJ].threateningLocations.get(i).x, board[finalI][finalJ].threateningLocations.get(i).y));
+                                    }
+
+                                    for (int loc = board[finalI][finalJ].threateningLocations.size()-1; loc >= 0; loc --){
+
+                                        placePieceAt(board[finalI][finalJ], board[finalI][finalJ].threateningLocations.get(loc));
+                                        if (inCheck(curPlayer)){
+                                            curThreatening.remove(loc);
                                         }
-                                        int originalX = board[finalI][finalJ].location.x;
-                                        int originalY = board[finalI][finalJ].location.y;                                
-                                        ArrayList<Point> curThreatening = new ArrayList<>();
                                         
-                                        //Create a copy of the x/y values to prevent passing by reference
-                                        for (int i = 0; i < board[finalI][finalJ].threateningLocations.size(); i ++){
-                                            curThreatening.add(new Point(board[finalI][finalJ].threateningLocations.get(i).x, board[finalI][finalJ].threateningLocations.get(i).y));
+                                        //Restore from backup
+                                        for (int rowi = 0; rowi < rows; rowi++){
+                                            System.arraycopy(backup[rowi], 0, board[rowi], 0, cols);
+                                        }
+                                        board[finalI][finalJ].location.x = originalX;
+                                        board[finalI][finalJ].location.y = originalY;
+                                        board[finalI][finalJ].updateThreateningLocations();
+                                    }
+
+                                    if (board[finalI][finalJ] instanceof Pawn){
+                                        ArrayList<Point> curMovable = new ArrayList<>();
+
+                                        //Add movable locations to the curMovable arrayList
+                                        for (int i = 0; i < board[finalI][finalJ].movableLocations.size(); i ++){
+                                            curMovable.add(new Point(board[finalI][finalJ].movableLocations.get(i).x, board[finalI][finalJ].movableLocations.get(i).y));
                                         }
 
-                                        for (int loc = board[finalI][finalJ].threateningLocations.size()-1; loc >= 0; loc --){
+                                        //Check if the pawn can stop the check
+                                        for (int loc = board[finalI][finalJ].movableLocations.size()-1; loc >= 0; loc --){
+                                            //Place pawn at proposed location
+                                            placePieceAt(board[finalI][finalJ], board[finalI][finalJ].movableLocations.get(loc));
 
-                                            placePieceAt(board[finalI][finalJ], board[finalI][finalJ].threateningLocations.get(loc));
+                                            //If still in check, this is not a legal move
                                             if (inCheck(curPlayer)){
-
-                                                curThreatening.remove(loc);
+                                                curMovable.remove(loc);
                                             }
+                                            //Restore from backup
                                             for (int rowi = 0; rowi < rows; rowi++){
                                                 System.arraycopy(backup[rowi], 0, board[rowi], 0, cols);
                                             }
+                                            //Restore location data
                                             board[finalI][finalJ].location.x = originalX;
                                             board[finalI][finalJ].location.y = originalY;
-                                            board[finalI][finalJ].updateThreateningLocations();
+                                            //Update threatening locations
+                                            board[finalI][finalJ].updateMovableLocations();
+
                                         }
-
-                                        if (board[finalI][finalJ] instanceof Pawn){
-                                            ArrayList<Point> curMovable = new ArrayList<>();
-                                            
-                                            //Add movable locations to the curMovable arrayList
-                                            for (int i = 0; i < board[finalI][finalJ].movableLocations.size(); i ++){
-                                                curMovable.add(new Point(board[finalI][finalJ].movableLocations.get(i).x, board[finalI][finalJ].movableLocations.get(i).y));
-                                            }
-                                            
-                                            //Check if the pawn can stop the check
-                                            for (int loc = board[finalI][finalJ].movableLocations.size()-1; loc >= 0; loc --){
-                                                //Place pawn at proposed location
-                                                placePieceAt(board[finalI][finalJ], board[finalI][finalJ].movableLocations.get(loc));
-                                                
-                                                //If still in check, this is not a legal move
-                                                if (inCheck(curPlayer)){
-                                                    curMovable.remove(loc);
-                                                }
-                                                //Restore from backup
-                                                for (int rowi = 0; rowi < rows; rowi++){
-                                                    System.arraycopy(backup[rowi], 0, board[rowi], 0, cols);
-                                                }
-                                                //Restore location data
-                                                board[finalI][finalJ].location.x = originalX;
-                                                board[finalI][finalJ].location.y = originalY;
-                                                //Update threatening locations
-                                                board[finalI][finalJ].updateMovableLocations();
-
-                                            }
-                                            board[finalI][finalJ].movableLocations = curMovable;
-                                        }
-                                        board[finalI][finalJ].threateningLocations = curThreatening;
+                                        board[finalI][finalJ].movableLocations = curMovable;
                                     }
+                                    board[finalI][finalJ].threateningLocations = curThreatening;
                                 }
-                                
-                                //Reset chessboard tile backgrounds
-                                resetBackgrounds();
-                                //Set current piece (selected) background to cyan
-                                buttons[finalI][finalJ].setBackground(Color.CYAN);
-                                
-                                //Reset curMove to null if needed 
-                                //(prevents a player from clicking a movable piece, then an unmovable piece and moving the movable piece while the second piece is selected)
-                                boolean setNew = false;
-                                if (!board[finalI][finalJ].threateningLocations.isEmpty()){
-                                    for (int loc = 0; loc < board[finalI][finalJ].threateningLocations.size(); loc++){
-                                        if (isPieceAt(board[finalI][finalJ].threateningLocations.get(loc).x, board[finalI][finalJ].threateningLocations.get(loc).y)){
-                                            buttons[board[finalI][finalJ].threateningLocations.get(loc).x][board[finalI][finalJ].threateningLocations.get(loc).y].setBackground(Color.RED);
-                                        }
-                                        else{
-                                            buttons[board[finalI][finalJ].threateningLocations.get(loc).x][board[finalI][finalJ].threateningLocations.get(loc).y].setBackground(Color.GREEN);
-                                        }                                
+                            }
+
+                            //Reset chessboard tile backgrounds
+                            resetBackgrounds();
+                            //Set current piece (selected) background to cyan
+                            buttons[finalI][finalJ].setBackground(Color.CYAN);
+
+                            //Reset curMove to null if needed 
+                            //(prevents a player from clicking a movable piece, then an unmovable piece and moving the movable piece while the second piece is selected)
+                            boolean setNew = false;
+                            if (!board[finalI][finalJ].threateningLocations.isEmpty()){
+                                for (int loc = 0; loc < board[finalI][finalJ].threateningLocations.size(); loc++){
+                                    if (isPieceAt(board[finalI][finalJ].threateningLocations.get(loc).x, board[finalI][finalJ].threateningLocations.get(loc).y)){
+                                        buttons[board[finalI][finalJ].threateningLocations.get(loc).x][board[finalI][finalJ].threateningLocations.get(loc).y].setBackground(Color.RED);
                                     }
-
-                                    curMove = new Point(finalI, finalJ);
-                                    setNew = true;
-                                }
-                                if (!board[finalI][finalJ].movableLocations.isEmpty()){
-                                    for (int loc = 0; loc < board[finalI][finalJ].movableLocations.size(); loc++){
-                                        buttons[board[finalI][finalJ].movableLocations.get(loc).x][board[finalI][finalJ].movableLocations.get(loc).y].setBackground(Color.GREEN);
-                                    }
-                                    curMove = new Point(finalI, finalJ);
-                                    setNew = true;
-                                }
-                                if (!setNew){
-                                    curMove = null;
+                                    else{
+                                        buttons[board[finalI][finalJ].threateningLocations.get(loc).x][board[finalI][finalJ].threateningLocations.get(loc).y].setBackground(Color.GREEN);
+                                    }                                
                                 }
 
-
-
+                                curMove = new Point(finalI, finalJ);
+                                setNew = true;
+                            }
+                            if (!board[finalI][finalJ].movableLocations.isEmpty()){
+                                for (int loc = 0; loc < board[finalI][finalJ].movableLocations.size(); loc++){
+                                    buttons[board[finalI][finalJ].movableLocations.get(loc).x][board[finalI][finalJ].movableLocations.get(loc).y].setBackground(Color.GREEN);
+                                }
+                                curMove = new Point(finalI, finalJ);
+                                setNew = true;
+                            }
+                            if (!setNew){
+                                curMove = null;
+                            }
                         }
                         
                         //Update the current piece image shown in the sidebar if the piece clicked belongs to the current player

@@ -7,7 +7,10 @@ import java.awt.Point;
 
 public class Knight extends Piece{
     public Knight(String owner, Point initialLocation, ChessGame game) {
-        super(owner, initialLocation, game);
+        //Call superclass constructor to set up some attributes
+        super(owner, initialLocation, game);        
+        
+        //Set id according the owner
         if (owner.equalsIgnoreCase("player1")) {
             id = 'N';
         } else if (owner.equalsIgnoreCase("player2")) {

@@ -9,12 +9,17 @@ public class Pawn extends Piece{
     public boolean firstMove;
     
     public Pawn(String owner, Point initialLocation, ChessGame game) {
+        //Call superclass constructor to set up some attributes
         super(owner, initialLocation, game);
+        
+        //Set id according the owner
         if (owner.equalsIgnoreCase("player1")) {
             id = 'P';
         } else if (owner.equalsIgnoreCase("player2")) {
             id = 'p';
         }
+        //Pawn can move forward twice if it has not moved yet
+        //Keeps track of whether it can do this
         firstMove = true;
     }
     
