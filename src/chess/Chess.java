@@ -4,9 +4,9 @@
 package chess;
 
 /**
- *
- * @author advai
+ * @author Advait Maybhate, Lucy Liu, Ben Brunt and Isabel Shu
  */
+
 public class Chess {
     //Used to start the game
     public static void main(String[] args) {
