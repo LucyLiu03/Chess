@@ -1,15 +1,10 @@
 /*
- * To change this template, choose Tools | Templates
- * and open the template in the editor.
+ * A Rook subclass, inheriting from the Piece superclass.
  */
 package chess;
 
 import java.awt.Point;
 
-/**
- *
- * @author advai
- */
 public class Rook extends Piece{
     public Rook(String owner, Point initialLocation, ChessGame game) {
         super(owner, initialLocation, game);
@@ -21,11 +16,14 @@ public class Rook extends Piece{
     }
     @Override
     protected void updateThreateningLocations() {
+        //Clear exisiting threatening locations
         threateningLocations.clear();
-        threateningLocations.addAll(getVerticalLocations(1));
-        threateningLocations.addAll(getVerticalLocations(-1));
         
+        //A rook can move vertically and horizontally according to its line of sight
+        threateningLocations.addAll(getVerticalLocations(1));
+        threateningLocations.addAll(getVerticalLocations(-1));        
         threateningLocations.addAll(getHorizontalLocations(1));
         threateningLocations.addAll(getHorizontalLocations(-1));
     }
 }
+//End of Rook class

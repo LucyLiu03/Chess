@@ -1,15 +1,10 @@
 /*
- * To change this template, choose Tools | Templates
- * and open the template in the editor.
+ * A Queen subclass, inheriting from the Piece superclass.
  */
 package chess;
 
 import java.awt.Point;
 
-/**
- *
- * @author advai
- */
 public class Queen extends Piece{
     public Queen(String owner, Point initialLocation, ChessGame game) {
         super(owner, initialLocation, game);
@@ -20,7 +15,9 @@ public class Queen extends Piece{
         }
     }
     
+    @Override
     protected void updateThreateningLocations(){
+        //Clear exisiting threatening locations
         threateningLocations.clear();
         
         threateningLocations.addAll(getVerticalLocations(1)); // locations up
@@ -33,7 +30,6 @@ public class Queen extends Piece{
         threateningLocations.addAll(getDiagonalLocations("NW")); //diagonal NW
         threateningLocations.addAll(getDiagonalLocations("SE")); //diagonal SE
         threateningLocations.addAll(getDiagonalLocations("SW")); //diagonal SW
-        
-//        updateMovableLocations();
     }
 }
+//End of Queen class

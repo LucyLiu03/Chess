@@ -1,15 +1,10 @@
 /*
- * To change this template, choose Tools | Templates
- * and open the template in the editor.
+ * A Pawn subclass, inheriting from the Piece superclass.
  */
 package chess;
 
 import java.awt.Point;
 
-/**
- *
- * @author advai
- */
 public class Pawn extends Piece{
     public boolean firstMove;
     
@@ -33,7 +28,7 @@ public class Pawn extends Piece{
             oneOffset = 1;
         }
         movableLocations.clear();
-//        
+        
         if (oneOffset != 0 && !game.getChessBoard().isPieceAt(location.x+oneOffset, location.y) && ChessBoard.locationInBounds(new Point(location.x+oneOffset, location.y))){
             movableLocations.add(new Point(location.x+oneOffset, location.y));
             if (firstMove){
@@ -48,6 +43,7 @@ public class Pawn extends Piece{
     
     @Override
     protected void updateThreateningLocations() {
+        //Clear exisiting threatening locations
         int oneOffset = 0;
         if (owner.equalsIgnoreCase("player1") && location.x >= 1) {
             oneOffset = -1;
@@ -69,11 +65,10 @@ public class Pawn extends Piece{
             if (location.y <= 6 && game.getChessBoard().isPieceAt(location.x + oneOffset, location.y + 1)) {
                 if (!game.getChessBoard().getPieceOwner(new Point(location.x + oneOffset, location.y + 1)).equals(owner)){
                     threateningLocations.add(new Point(location.x + oneOffset, location.y + 1));
-                    //TODO FIX END PAWN ACTION
-//                    
                 }
             }
             updateMovableLocations();
         }
     }
 }
+//End of Pawn class

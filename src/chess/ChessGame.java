@@ -1,14 +1,11 @@
 /*
- * To change this template, choose Tools | Templates
- * and open the template in the editor.
+ * A class to hold the chessBoard object. This class sets up the chess board (initial piece setup)
+ * and its graphics.
  */
 package chess;
 
 import java.awt.Point;
-/**
- *
- * @author advai
- */
+
 public class ChessGame {
     private ChessBoard chessBoard;
 
@@ -18,7 +15,7 @@ public class ChessGame {
         setupTeam(0, "player2");
         setupTeam(7, "player1");
         
-        chessBoard.createGraphics(8, 8);
+        chessBoard.createGraphics();
         chessBoard.graphicsFrame.pack();
         chessBoard.graphicsFrame.setVisible(true);
     }
@@ -61,8 +58,5 @@ public class ChessGame {
             Piece p = new Pawn(player, new Point(homeRow + oneOffsetPawn, i), this);
         }
         this.getChessBoard().toString();
-        
     }
-    
-
 }
